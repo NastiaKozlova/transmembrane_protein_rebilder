@@ -5,7 +5,7 @@ library(ggplot2)
 setwd(part_start)
 parta<-paste0(part_start,"structure_prediction/")
 df_start<-read.csv("start/df_parts.csv",stringsAsFactors = F)
-name<-1
+name<-4
 i<-1
 for (name in 1:nrow(df_start)) {
   part<-paste0(parta,df_start$name[name])
@@ -47,6 +47,7 @@ for (name in 1:nrow(df_start)) {
     }
     df_pdb_TEMP<-df_pdb_TEMP%>%arrange(start)
     df_pdbt<-df_pdb_TEMP%>%filter(finish>1)
+    df_pdbt<-df_pdbt%>%filter(finish!=start)
     max_nrow<-nrow(df_pdbt)
     df_pdbt<-left_join(df_pdbt,df_pdb_test,by=c("start"="resno"))
     df_pdbt<-left_join(df_pdbt,df_pdb_test,by=c("finish"="resno"))
@@ -54,23 +55,24 @@ for (name in 1:nrow(df_start)) {
     df_pdbt<-df_pdbt%>%mutate(max_length=(finish-start-1)*3)
     df_pdbt<-df_pdbt%>%filter(length>2)
     df_pdbt<-df_pdbt%>%filter(length<max_length)
-
-    df_RMSD$max_length[i]<-max(df_pdbt$length)
-    df_RMSD$min_length[i]<-min(df_pdbt$length)
-    if(max_nrow==nrow(df_pdbt)){
-      pdb.int<-atom.select(pdb,resno = df_pdb$start[1]:df_pdb$finish[1])
-      pdb_1<-trim.pdb(pdb,pdb.int)
-      pdb.int<-atom.select(pdb,resno = df_pdb$start[2]:df_pdb$finish[2])
-      pdb_2<-trim.pdb(pdb,pdb.int)
-      pdb<-cat.pdb(pdb_1,pdb_2,renumber = F,rechain = F)
-      write.pdb(pdb,paste0("structure/",df_RMSD$models[i]))
-      bs1<-binding.site(a=pdb_1,b=pdb_2)
-      bs2<-binding.site(a=pdb_2,b=pdb_1)
-      bs<-unique(c(bs1$resnames,bs2$resnames))
-      df_interactions<-data.frame(matrix(ncol=1,nrow = length(bs)))
-      colnames(df_interactions)<-"full_amino_name"
-      df_interactions$full_amino_name<-bs
-      write.csv(df_interactions,paste0("interactions/",df_RMSD$models[i]),row.names = F)
+    if(nrow(df_pdbt)>0){
+      df_RMSD$max_length[i]<-max(df_pdbt$length)
+      df_RMSD$min_length[i]<-min(df_pdbt$length)
+      if(max_nrow==nrow(df_pdbt)){
+        pdb.int<-atom.select(pdb,resno = df_pdb$start[1]:df_pdb$finish[1])
+        pdb_1<-trim.pdb(pdb,pdb.int)
+        pdb.int<-atom.select(pdb,resno = df_pdb$start[2]:df_pdb$finish[2])
+        pdb_2<-trim.pdb(pdb,pdb.int)
+        pdb<-cat.pdb(pdb_1,pdb_2,renumber = F,rechain = F)
+        write.pdb(pdb,paste0("structure/",df_RMSD$models[i]))
+        bs1<-binding.site(a=pdb_1,b=pdb_2)
+        bs2<-binding.site(a=pdb_2,b=pdb_1)
+        bs<-unique(c(bs1$resnames,bs2$resnames))
+        df_interactions<-data.frame(matrix(ncol=1,nrow = length(bs)))
+        colnames(df_interactions)<-"full_amino_name"
+        df_interactions$full_amino_name<-bs
+        write.csv(df_interactions,paste0("interactions/",df_RMSD$models[i]),row.names = F)
+      }
     }
   }
   

@@ -56,7 +56,7 @@ for (i in 1:nrow(df_start)) {
   write.pdb(pdb_f,paste0(df_start$name[i],"/ligand.pdb"))
   write.pdb(pdb_s,paste0(df_start$name[i],"/receptor.pdb"))
   
-  df_start$script[i]<-paste0("cd ",part,df_start$name[i],"/patchdock/\n",
+  df_start$script[i]<-paste0("#!/bin/bash\n\ncd ",part,df_start$name[i],"/patchdock/\n",
                              path_to_PatchDock,"buildParamsFine.pl ","../receptor.pdb ", "../ligand.pdb 2.0 EI\n",
                              path_to_PatchDock,"patch_dock.Linux params.txt out.txt\n")
   system(command=df_start$script[i],ignore.stdout=T,wait = T,intern=F,ignore.stderr = T,show.output.on.console = F,minimized = T)

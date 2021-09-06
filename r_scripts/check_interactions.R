@@ -38,23 +38,25 @@ for (name in 1:nrow(df_start)) {
   i<-1
   for (i in 1:nrow(df_RMSD)) {
     if(!file.exists(paste0("compare_interaction/",df_RMSD$number[i],".csv"))){
-      df_RMSD_test<-read.csv(paste0("RMSD_test/",df_RMSD$number[i],".csv"),stringsAsFactors = F)
-      df_interactions_a<-df_interactions[df_interactions$number%in%df_RMSD_test$number.x,]
-      df_interactions_b<-df_interactions[df_interactions$number%in%df_RMSD_test$number.y,]
-      df_interactions_full<-left_join(df_interactions_a,df_interactions_b,by="full_amino_name")
-      df_interactions_full<-df_interactions_full%>%filter(!is.na(number.x))
-      df_interactions_full<-df_interactions_full%>%filter(!is.na(number.y))
-      df_interactions_full<-df_interactions_full%>%group_by(number.y)%>%mutate(number_semi=n())
-      df_interactions_full<-ungroup(df_interactions_full)
-      df_interactions_full<-df_interactions_full%>%select(number.x, number.y, number_semi,number_interactions.x,number_interactions.y)
-      df_interactions_full<-unique(df_interactions_full)
-      df_interactions_full<-df_interactions_full%>%mutate(persent.x=number_semi/number_interactions.x*100)
-      df_interactions_full<-df_interactions_full%>%mutate(persent.y=number_semi/number_interactions.y*100)
-      df_interactions_full<-df_interactions_full%>%filter(persent.x>10)
-      df_interactions_full<-df_interactions_full%>%filter(persent.y>10)
-      df_interactions_full<-df_interactions_full%>%select(number.x, number.y, number_semi,persent.x,persent.y)
-      df_interactions_full<-unique(df_interactions_full)
-      write.csv(df_interactions_full,paste0("compare_interaction/",df_RMSD$models[i]),row.names = F)
+        if(file.exists(paste0("RMSD_test/",df_RMSD$number[i],".csv"))){
+        df_RMSD_test<-read.csv(paste0("RMSD_test/",df_RMSD$number[i],".csv"),stringsAsFactors = F)
+        df_interactions_a<-df_interactions[df_interactions$number%in%df_RMSD_test$number.x,]
+        df_interactions_b<-df_interactions[df_interactions$number%in%df_RMSD_test$number.y,]
+        df_interactions_full<-left_join(df_interactions_a,df_interactions_b,by="full_amino_name")
+        df_interactions_full<-df_interactions_full%>%filter(!is.na(number.x))
+        df_interactions_full<-df_interactions_full%>%filter(!is.na(number.y))
+        df_interactions_full<-df_interactions_full%>%group_by(number.y)%>%mutate(number_semi=n())
+        df_interactions_full<-ungroup(df_interactions_full)
+        df_interactions_full<-df_interactions_full%>%select(number.x, number.y, number_semi,number_interactions.x,number_interactions.y)
+        df_interactions_full<-unique(df_interactions_full)
+        df_interactions_full<-df_interactions_full%>%mutate(persent.x=number_semi/number_interactions.x*100)
+        df_interactions_full<-df_interactions_full%>%mutate(persent.y=number_semi/number_interactions.y*100)
+        df_interactions_full<-df_interactions_full%>%filter(persent.x>25)
+        df_interactions_full<-df_interactions_full%>%filter(persent.y>25)
+        df_interactions_full<-df_interactions_full%>%select(number.x, number.y, number_semi,persent.x,persent.y)
+        df_interactions_full<-unique(df_interactions_full)
+        write.csv(df_interactions_full,paste0("compare_interaction/",df_RMSD$models[i]),row.names = F)
+      }
     }
   }
 }

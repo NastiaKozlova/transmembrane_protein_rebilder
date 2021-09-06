@@ -21,6 +21,7 @@ for (name in 1:nrow(df_start)) {
   if(!dir.exists(paste0("Energy/full"))){dir.create(paste0("Energy/full"))}
   if(!dir.exists(paste0("Energy/first"))){dir.create(paste0("Energy/first"))}
   if(!dir.exists(paste0("Energy/second"))){dir.create(paste0("Energy/second"))}
+  if(!dir.exists(paste0("Energy/bond_energy"))){dir.create(paste0("Energy/bond_energy"))}
   #  if(!dir.exists(paste0(name[part],"/MD/stabilisation"))){dir.create(paste0(name[part],"/MD/stabilisation"))}
   #  if(!dir.exists(paste0(name[part],"/MD/stabilisation/protein"))){dir.create(paste0(name[part],"/MD/stabilisation/protein"))}
   #  if(!dir.exists(paste0(name[part],"/MD/stabilisation/pdb"))){dir.create(paste0(name[part],"/MD/stabilisation/pdb"))}
@@ -72,8 +73,13 @@ for (name in 1:nrow(df_start)) {
                         part_start,'start/toppar/par_all36_cgenff.prm -par ',part_start,'start/toppar/par_all36_lipid.prm -par ',part_start,
                         'start/toppar/par_all36m_prot.prm -par ',part_start,'start/toppar/par_all36_na.prm -par ',
                         part_start,'start/toppar/par_all36_prot.prm -par ',part_start,'start/toppar/toppar_water_ions_namd.str')
-    df_tcl[1,10]<-'mol delete all'
-    df_tcl[1,11]<-'\n\nexit now'
+    df_tcl[1,10]<-paste0('namdenergy -sel $sel3 $sel1  -vdw -elec -nonb -cutoff 12 -skip 0 -ofile Energy/bond_energy/',df_RMSD$models[i],
+                        ' -switch 10 -exe ',part_start,'programs/NAMD_2.14_Linux-x86_64-multicore/namd2 -par ',part_start,'start/toppar/par_all36_carb.prm -par ',
+                        part_start,'start/toppar/par_all36_cgenff.prm -par ',part_start,'start/toppar/par_all36_lipid.prm -par ',part_start,
+                        'start/toppar/par_all36m_prot.prm -par ',part_start,'start/toppar/par_all36_na.prm -par ',
+                        part_start,'start/toppar/par_all36_prot.prm -par ',part_start,'start/toppar/toppar_water_ions_namd.str')
+    df_tcl[1,11]<-'mol delete all'
+    df_tcl[1,12]<-'\n\nexit now'
     write.table(df_tcl,file =paste0('Energy/namd_tcl/',df_RMSD$models[i],'.tcl'),sep = '\n',na = '' ,row.names = F,col.names = F,quote = F)
     print(paste0('vmd -dispdev text -e ',part,'Energy/namd_tcl/',df_RMSD$models[i],'.tcl'))
     
@@ -82,12 +88,14 @@ for (name in 1:nrow(df_start)) {
       df_first<-read.table(paste0("Energy/first/",df_RMSD$models[i]), sep="", header=T, na.strings ="", stringsAsFactors= F)
       df_second<-read.table(paste0("Energy/second/",df_RMSD$models[i]), sep="", header=T, na.strings ="", stringsAsFactors= F)
       df_full<-read.table(paste0("Energy/full/",df_RMSD$models[i]), sep="", header=T, na.strings ="", stringsAsFactors= F)
+      df_bond_energy<-read.table(paste0("Energy/bond_energy/",df_RMSD$models[i]), sep="", header=T, na.strings ="", stringsAsFactors= F)
       df_RMSD$first_energy[i]<-df_first$Total[1]
       df_RMSD$second_energy[i]<-df_second$Total[1]
       df_RMSD$total_energy[i]<-df_full$Total[1]
+      df_RMSD$bond_energy[i]<-df_bond_energy$Total[1]
     }
   }
-  df_RMSD<-df_RMSD%>%mutate(bond_energy=total_energy-first_energy-second_energy)
+  df_RMSD<-df_RMSD%>%mutate(bond_energy_fs=total_energy-first_energy-second_energy)
   write.csv(df_RMSD,"df_complex_energy.csv",row.names = F)
   system(command = paste0("rm -r ",part,"Energy"),ignore.stdout=T,wait = T)
 }

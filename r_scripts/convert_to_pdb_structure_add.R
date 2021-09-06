@@ -6,14 +6,15 @@ part<-paste0(part_start,"structure_prediction/")
 start<-read.pdb(paste0(part_start,"start/start.pdb"))
 df_start<-read.csv(paste0(part_start,"start/df_parts.csv"),stringsAsFactors = F)
 w<-1
-protein<-2
+protein<-1
 setwd(part)
 i<-1
 for(w in 1:nrow(df_start)){
   df_start_add<-read.csv(paste0(df_start$name[w],"/fin.csv"),stringsAsFactors = F)
+  v_filter<-list.files(paste0(df_start$name[w],"/add_domain/"))
+  df_start_add<-df_start_add[df_start_add$group_number%in%v_filter,]
+  df_start_add<-df_start_add%>%mutate(script=NA)
   for(protein in 1:nrow(df_start_add)){
-#    pdb_1<-read.pdb(paste0(df_start$name[w],"/fin_str/",protein,"__",df_start_add$best_model[protein]))
-    df_start_add<-df_start_add%>%mutate(script=NA)
     part_fin<-paste0(part,df_start$name[w],"/add_domain/",df_start_add$group_number[protein],"/")
     setwd(part_fin)
     if(file.exists(paste0(part_fin,"patchdock/params.txt"))){
@@ -101,8 +102,11 @@ for(w in 1:nrow(df_start)){
       bs2<-binding.site(a=pdb_2,b=pdb_1)
       bs3<-binding.site(a=pdb_3,b=pdb_2)
       bs4<-binding.site(a=pdb_2,b=pdb_3)
+      bs5<-binding.site(a=pdb_1,b=pdb_3)
+      bs6<-binding.site(a=pdb_3,b=pdb_1)
       bs<-unique(c(bs1$resnames,bs2$resnames,
-                   bs3$resnames,bs4$resnames))
+                   bs3$resnames,bs4$resnames,
+                   bs5$resnames,bs6$resnames))
       if(length(bs>2)){
         df_interactions<-data.frame(matrix(ncol=1,nrow = length(bs)))
         colnames(df_interactions)<-"full_amino_name"

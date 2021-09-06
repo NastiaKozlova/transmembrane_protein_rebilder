@@ -30,19 +30,10 @@ for (name in 1:nrow(df_start)) {
   if (!dir.exists("compare_TEMP/")){dir.create("compare_TEMP/")}
   df_RMSD<-read.csv("df_RMSD_fin.csv",stringsAsFactors = F)
   df_RMSD<-df_RMSD%>%mutate(number_paired_models=NA)
-#  for (i in 1:nrow(df_RMSD)) {
-#    df_RMSD$number[i]<-strsplit(df_RMSD$models[i],split = ".",fixed = T)[[1]][3]
-#  }
-#  df_RMSD<-df_RMSD%>%select(models,number)
-#  df_RMSD<-df_RMSD%>%mutate(number=as.numeric(number))
-#  df_RMSD<-df_RMSD%>%mutate(number_models=NA)
-  print(Sys.time())
   for (j in 1:nrow(df_RMSD)) {
     df_interactions<-read.csv(paste0("compare_interaction/",df_RMSD$models[j]),stringsAsFactors = F)
     df_interactions<-df_interactions%>%filter(persent.x>50)
     df_interactions<-df_interactions%>%filter(persent.y>50)
-#   df_interactions<-reformat_data(df_interactions,df_RMSD)
-
     df_RMSD$number_paired_models[j]<-nrow(df_interactions)
     df_interactions<-df_interactions%>%filter(number.x<number.y) 
     write.csv(df_interactions,paste0("compare_TEMP/",df_RMSD$number[j],".csv"),row.names = F)
@@ -70,7 +61,6 @@ for (name in 1:nrow(df_start)) {
     }
     write.csv(df_interactions,paste0("RMSD_TEMP/",group_name,".csv"),row.names=F)
   }
-#  v_name<-list.files("RMSD_TEMP/")
 }
 print(Sys.time())
 for (name in 1:nrow(df_start)) {
@@ -85,16 +75,6 @@ for (name in 1:nrow(df_start)) {
     df_interactions<-rbind(df_interactions,df_interactions_add)
   }
   rm(df_interactions_add)
-#  df_interactions<-read.csv(paste0("df_interactions_fin.csv"),stringsAsFactors = F)
-#  df_interactions<-df_interactions%>%mutate(number_min=number.y)
-#  df_interactions<-df_interactions%>%mutate(number_max=number.x)
-#  df_interactions$number_min[df_interactions$number.x<df_interactions$number.y]<-df_interactions$number.x[df_interactions$number.x<df_interactions$number.y]
-#  df_interactions$number_max[df_interactions$number.x<df_interactions$number.y]<-df_interactions$number.y[df_interactions$number.x<df_interactions$number.y]
-#  df_interactions<-df_interactions%>%select(number_min,number_max)
-#  df_interactions<-df_interactions%>%filter(number_min<number_max)
-#  df_interactions<-df_interactions%>%mutate(compation=paste0(number_min,"_",number_max))
-#  df_interactions<-df_interactions%>%group_by(compation)%>%mutate(test=n())
-#  df_interactions<-unique(df_interactions)
   write.csv(df_interactions,"df_interactions_fin.csv",row.names=F)
 }
 print(Sys.time())

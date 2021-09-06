@@ -45,13 +45,12 @@ for(name in 1:nrow(df_start)){
       df_RMSD$number_models[j]<-nrow(df_interactions)
       write.csv(df_interactions,paste0("compare_TEMP/",df_RMSD$number[j],".csv"),row.names = F)
     }
-    write.csv(df_RMSD,paste0("df_RMSD_compare_interactions.csv"),row.names = F)
+    write.csv(df_interactions,"df_interactions_all.csv",row.names=F)
+    df_interactions<-read.csv("df_interactions_all.csv",stringsAsFactors = F)
+    write.csv(df_RMSD,"df_RSMD_interactions_all.csv",row.names=F)
     
   }
-  for (name in 1:nrow(df_start)) {
-    part<-paste0(parta,df_start$name[name])
-    setwd(part)
-    if (!dir.exists("RMSD_TEMP/")){dir.create("RMSD_TEMP/")}
+  if (!dir.exists("RMSD_TEMP/")){dir.create("RMSD_TEMP/")}
     i<-1
     df_RMSD<-read.csv(paste0("df_RMSD_compare_interactions.csv"),stringsAsFactors =  F)
     df_RMSD<-df_RMSD%>%filter(number_models>quantile(df_RMSD$number_models,probs = 0.25))
@@ -92,6 +91,7 @@ for(name in 1:nrow(df_start)){
     df_interactions<-df_interactions%>%mutate(compation=paste0(number_min,"_",number_max))
     df_interactions<-df_interactions%>%group_by(compation)%>%mutate(test=n())
     df_interactions<-unique(df_interactions)
+    
     write.csv(df_interactions,"df_interactions_fin.csv",row.names=F)
   }
   for (name in 1:nrow(df_start)) {
