@@ -7,14 +7,23 @@ This project is focused on alternative folds searching if it is possible. It reb
 ## Algorithm
 
 r_scripts/pdb_prepare.R ",part_start - prepare parts of protein strructures and run docking using PatchDock __Doesn't run on Debian 10__ Segmentation error are occure, problem with PathDock, programm is docking shourter part to there longer one 
+
 r_scripts/convert_to_pdb_structure_no.R - arrange protein parts that parts of proteins are in the same order as in the starting structure and counting aminoacids which intercation beetween the parts and sort imblsible structures based on the length of gup between parts of proteins.
+
 r_scripts/check_energy.R - counting energy interactions between parts of structure
+
 r_scripts/filter_pre_intercation_check.R - 
+
 r_scripts/check_interactions.R - 
+
 sort_structure_interactions.R - 
+
 TMD_no_7_analysis.R - counting RMSD between all selected as simulart parts of structues
+
 TMD_no_7_combine_files_RMSD_analysis.R - combine all RMSD files in one
+
 TMD_no_7_fin_report.R - 
+
 first_part_data_output.R - create output file 
 
 ## Dependencies
