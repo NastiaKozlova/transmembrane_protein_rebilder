@@ -6,7 +6,7 @@ library(ggplot2)
 setwd(part_start)
 df_start<-read.csv("start/df_parts.csv",stringsAsFactors = F)
 df_topology<-read.csv("start/df_topology.csv",stringsAsFactors = F)
-name<-4
+name<-1
 v_RMSD<-5
 persent_rigth<-3
 for (name in 1:nrow(df_start)) {
@@ -95,6 +95,7 @@ for (name in 1:nrow(df_start)) {
         df_groups<-left_join(df_groups,df_energy)#,by=c("models", "max_length",   "min_length","RMSD" ))
         write.csv(df_groups,file = paste0("fin_TEMP.csv"),row.names = F)   
       }
+      
       if(file.exists(paste0("fin_TEMP.csv"))){
         df_groups<-read.csv(file = paste0("fin_TEMP.csv"),stringsAsFactors =  F)  
 
@@ -124,9 +125,25 @@ for (name in 1:nrow(df_start)) {
           if(df_topology_TEST$type[(i-1)]!="Cytoplasmic"){df_topology_TEST$symbol[i]<-(-1)}
         }
         df_topology_TEST<-df_topology_TEST%>%filter(type=="Transmembrane")
-
-        i<-1
         df_groups<-df_groups%>%mutate(angle=NA)
+        pdb<-read.pdb(paste0("control.pdb"))
+        df_pdb<-pdb$atom
+        df_pdb<-df_pdb%>%filter(elety=="CA")
+        df_topology_TEST<-df_topology_TEST%>%mutate(x=NA)
+        df_topology_TEST<-df_topology_TEST%>%mutate(y=NA)
+        df_topology_TEST<-df_topology_TEST%>%mutate(z=NA)
+        for (p in 1:nrow(df_topology_TEST)) {
+          df_A1<-df_pdb%>%filter(resno==df_topology_TEST$seq_beg[p])
+          df_A2<-df_pdb%>%filter(resno==df_topology_TEST$seq_end[p])
+          v_length<-sqrt((df_A1$x[1]-df_A2$x[1])^2+(df_A1$y[1]-df_A2$y[1])^2+(df_A1$z[1]-df_A2$z[1])^2)
+          df_topology_TEST$x[p]<-(df_A1$x[1]-df_A2$x[1])/v_length*df_topology_TEST$symbol[p]
+          df_topology_TEST$y[p]<-(df_A1$y[1]-df_A2$y[1])/v_length*df_topology_TEST$symbol[p]
+          df_topology_TEST$z[p]<-(df_A1$z[1]-df_A2$z[1])/v_length*df_topology_TEST$symbol[p]
+        }
+        v_control_x<-mean(df_topology_TEST$x)
+        v_control_y<-mean(df_topology_TEST$y)
+        v_control_z<-mean(df_topology_TEST$z)
+        i<-1
         for (i in 1:nrow(df_groups)) {
           pdb<-read.pdb(paste0("structure/",df_groups$models[i]))
           write.pdb(pdb,paste0("fin_str/",df_groups$group_number[i],".pdb"))
@@ -147,41 +164,16 @@ for (name in 1:nrow(df_start)) {
           v_topology_x<-mean(df_topology_TEST$x)
           v_topology_y<-mean(df_topology_TEST$y)
           v_topology_z<-mean(df_topology_TEST$z)
-          v_tost<-v_topology_x*0+v_topology_z*0+v_topology_z*1
-          df_groups$angle[i]<-asin(v_tost)
+          v_tost<-v_topology_x*v_control_x+v_topology_y*v_control_y+v_topology_z*v_control_z
+          df_groups$angle[i]<-acos(v_tost)
         }
         df_groups<-df_groups%>%mutate(angle=angle*90/pi*2)
-        
-        df_control<-data.frame(matrix(ncol = 2,nrow=1))
-        colnames(df_control)<-c("name","angle")
-        pdb<-read.pdb(paste0("control.pdb"))
-        df_pdb<-pdb$atom
-        df_pdb<-df_pdb%>%filter(elety=="CA")
-        df_topology_TEST<-df_topology_TEST%>%mutate(x=NA)
-        df_topology_TEST<-df_topology_TEST%>%mutate(y=NA)
-        df_topology_TEST<-df_topology_TEST%>%mutate(z=NA)
-        for (p in 1:nrow(df_topology_TEST)) {
-          df_A1<-df_pdb%>%filter(resno==df_topology_TEST$seq_beg[p])
-          df_A2<-df_pdb%>%filter(resno==df_topology_TEST$seq_end[p])
-          v_length<-sqrt((df_A1$x[1]-df_A2$x[1])^2+(df_A1$y[1]-df_A2$y[1])^2+(df_A1$z[1]-df_A2$z[1])^2)
-          df_topology_TEST$x[p]<-(df_A1$x[1]-df_A2$x[1])/v_length*df_topology_TEST$symbol[p]
-          df_topology_TEST$y[p]<-(df_A1$y[1]-df_A2$y[1])/v_length*df_topology_TEST$symbol[p]
-          df_topology_TEST$z[p]<-(df_A1$z[1]-df_A2$z[1])/v_length*df_topology_TEST$symbol[p]
-        }
-        v_topology_x<-mean(df_topology_TEST$x)
-        v_topology_y<-mean(df_topology_TEST$y)
-        v_topology_z<-mean(df_topology_TEST$z)
-        v_tost<-v_topology_x*0+v_topology_z*0+v_topology_z*1
-        df_control$angle[1]<-asin(v_tost)
-        df_control<-df_control%>%mutate(angle=angle*90/pi*2)
-        df_groups<-df_groups%>%mutate(angle_tested=(angle-df_control$angle[1]))
-        df_groups<-df_groups%>%mutate(orientarion="medium")
-        df_groups<-df_groups%>%mutate(orientarion_control="another orientation")
-        df_groups$orientarion[df_groups$angle>45]<-"positive"
-        df_groups$orientarion[df_groups$angle<(-45)]<-"negative"
-        df_groups$orientarion_control[abs(df_groups$angle_tested)<(20)]<-"as control"
-        df_groups<-df_groups%>%select(group_number,RMSD,angle,angle_tested,orientarion,orientarion_control,group_models,align_models,min_RMSD,max_RMSD,
-                                      best_model,models,RMSD, bond_energy, bond_energy_fs,group_name)
+        df_groups<-df_groups%>%mutate(orientarion="between")
+        df_groups$orientarion[abs(df_groups$angle)<45]<-"as WT"
+        df_groups$orientarion[abs(df_groups$angle)>135]<-"inverted"
+        df_groups$orientarion[df_groups$orientarion=="as WT"&df_groups$RMSD<10]<-"WT"
+        df_groups<-df_groups%>%select(name,group_number,group_models,align_models,name,      
+                                      RMSD,bond_energy,bond_energy_fs,angle,orientarion)
         write.csv(df_groups,file = paste0("fin.csv"),row.names = F) 
       }
     }
