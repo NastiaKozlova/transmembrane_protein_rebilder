@@ -165,7 +165,9 @@ for (name in 1:nrow(df_start)) {
           v_topology_y<-mean(df_topology_TEST$y)
           v_topology_z<-mean(df_topology_TEST$z)
           v_tost<-v_topology_x*v_control_x+v_topology_y*v_control_y+v_topology_z*v_control_z
+          v_tost_mem<-v_topology_x*0+v_topology_y*0+v_topology_z*1
           df_groups$angle[i]<-acos(v_tost)
+          df_groups$angle_mem[i]<-asin(v_tost_mem)
         }
         df_groups<-df_groups%>%mutate(angle=angle*90/pi*2)
         df_groups<-df_groups%>%mutate(orientarion="between")
@@ -173,7 +175,8 @@ for (name in 1:nrow(df_start)) {
         df_groups$orientarion[abs(df_groups$angle)>135]<-"inverted"
         df_groups$orientarion[df_groups$orientarion=="as WT"&df_groups$RMSD<10]<-"WT"
         df_groups<-df_groups%>%select(name,group_number,group_models,align_models,name,      
-                                      RMSD,bond_energy,bond_energy_fs,angle,orientarion)
+                                      RMSD,bond_energy,bond_energy_fs,angle,angle_mem,
+                                      orientarion,min_RMSD,max_RMSD)
         write.csv(df_groups,file = paste0("fin.csv"),row.names = F) 
       }
     }

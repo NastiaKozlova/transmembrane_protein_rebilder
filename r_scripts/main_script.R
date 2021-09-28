@@ -1,4 +1,5 @@
 part_start<-"path to transmembrane_protein_rebilder"
+part_start<-"/home/nastia/mem/storage/lacY/transmembrane_protein_rebilder/"
 #install.packages("dplyr")
 #install.packages("bio3d")
 #install.packages("readr")
@@ -19,6 +20,7 @@ system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/TMD_no_7_ana
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/TMD_no_7_combine_files_RMSD_analysis.R ",part_start),ignore.stdout=T,wait = T)
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/TMD_no_7_fin_report.R ",part_start),ignore.stdout=T,wait = T)
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/first_part_data_output.R ",part_start),ignore.stdout=T,wait = T)
+system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/TMD_interactions.R ",part_start),ignore.stdout=T,wait = T)
 #system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/remove_extra_files.R ",part_start),ignore.stdout=T,wait = T)
 
 #prepare pdb and run PatchDOCK second time
