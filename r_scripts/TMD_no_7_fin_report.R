@@ -100,8 +100,8 @@ for (name in 1:nrow(df_start)) {
         df_groups<-read.csv(file = paste0("fin_TEMP.csv"),stringsAsFactors =  F)  
 
         df_groups<-df_groups%>%filter(group_models>5)
-        df_groups<-df_groups%>%filter(group_models>nrow(df_RMSD_control)/1000)
-        df_groups<-df_groups%>%filter(group_models>=quantile(df_groups$group_models,0.975))
+#        df_groups<-df_groups%>%filter(group_models>nrow(df_RMSD_control)/1000)
+#        df_groups<-df_groups%>%filter(group_models>=quantile(df_groups$group_models,0.975))
         df_groups<-df_groups%>%arrange(desc(group_models))
         
         v_length_first<-(df_start$first_part_finish[name]-df_start$first_part_start[name]+1)
@@ -169,14 +169,6 @@ for (name in 1:nrow(df_start)) {
           df_groups$angle[i]<-acos(v_tost)
           df_groups$angle_mem[i]<-asin(v_tost_mem)
         }
-        df_groups<-df_groups%>%mutate(angle=angle*90/pi*2)
-        df_groups<-df_groups%>%mutate(orientarion="between")
-        df_groups$orientarion[abs(df_groups$angle)<45]<-"as WT"
-        df_groups$orientarion[abs(df_groups$angle)>135]<-"inverted"
-        df_groups$orientarion[df_groups$orientarion=="as WT"&df_groups$RMSD<10]<-"WT"
-        df_groups<-df_groups%>%select(name,group_number,group_models,align_models,name,      
-                                      RMSD,bond_energy,bond_energy_fs,angle,angle_mem,
-                                      orientarion,min_RMSD,max_RMSD)
         write.csv(df_groups,file = paste0("fin.csv"),row.names = F) 
       }
     }
