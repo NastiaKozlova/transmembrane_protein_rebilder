@@ -1,4 +1,5 @@
 part_start<-"path to transmembrane_protein_rebilder"
+part_start<-"/home/nastia/mem/storage/lacY/transmembrane_protein_rebilder/"
 
 #install.packages("dplyr")
 #install.packages("bio3d")
@@ -27,7 +28,9 @@ system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/TMD_interact
 #change 
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/pdb_convert.R ",part_start),ignore.stdout=T,wait = T)
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/convert_to_pdb_structure_add.R ",part_start),ignore.stdout=T,wait = T)
+
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/check_energy_add.R ",part_start),ignore.stdout=T,wait = T)
+
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/check_interactions_add.R ",part_start),ignore.stdout=T,wait = T)
 
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/sort_structure_interactions.R ",part_start),ignore.stdout=T,wait = T)

@@ -10,13 +10,21 @@ protein<-1
 setwd(part)
 i<-1
 for(w in 1:nrow(df_start)){
-  df_start_add<-read.csv(paste0(df_start$name[w],"/fin.csv"),stringsAsFactors = F)
-  v_filter<-list.files(paste0(df_start$name[w],"/add_domain/"))
+  if(!file.exists(paste0(df_start$name[w],"/fin.csv"))){
+    df_start$name[w]<-NA
+  }
+}
+df_start<-df_start%>%filter(!is.na(third_part_model))
+w<-2
+for(w in 1:nrow(df_start)){
+  df_start_add<-read.csv(paste0(part,df_start$name[w],"/fin.csv"),stringsAsFactors = F)
+  v_filter<-list.files(paste0(part,df_start$name[w],"/add_domain/"))
   df_start_add<-df_start_add[df_start_add$group_number%in%v_filter,]
   df_start_add<-df_start_add%>%mutate(script=NA)
   for(protein in 1:nrow(df_start_add)){
     part_fin<-paste0(part,df_start$name[w],"/add_domain/",df_start_add$group_number[protein],"/")
     setwd(part_fin)
+    write.pdb(start,"control.pdb")
     if(file.exists(paste0(part_fin,"patchdock/params.txt"))){
       system(command=paste0("rm ",part_fin,"patchdock/params.txt"),
            ignore.stdout=T,wait = T,intern=F,ignore.stderr = T)
@@ -115,7 +123,7 @@ for(w in 1:nrow(df_start)){
       }
     }
     df_RMSD<-read.csv("df_RMSD_start.csv",stringsAsFactors = F)
-    pdb_com<-read.pdb(paste0(part_start,"structure_prediction/",df_start$name[w],"/control.pdb"))
+    pdb_com<-read.pdb(paste0("control.pdb"))
     models<-list.files("structure")
     for (i in 1:nrow(df_RMSD)) {
       if (file.exists(paste0("structure/",df_RMSD$models[i]))){

@@ -13,10 +13,24 @@ i<-1
 df_start<-df_start%>%filter(!is.na(third_part_finish))
 df_start<-df_start%>%filter(third_part_start>0)
 df_start<-df_start%>%filter(third_part_finish>0)
+for(w in 1:nrow(df_start)){
+  if(!file.exists(paste0(df_start$name[w],"/fin.csv"))){
+    df_start$name[w]<-NA
+  }
+}
+df_start<-df_start%>%filter(!is.na(name))
 
+w<-1
 for(w in 1:nrow(df_start)){
   if(file.exists(paste0(df_start$name[w],"/fin.csv"))){
+    v_start<-length(list.files(paste0(df_start$name[1],"/structure")))
     df_start_add<-read.csv(paste0(df_start$name[w],"/fin.csv"),stringsAsFactors = F)
+    df_start_add<-df_start_add%>%mutate(name=df_start$name[1])
+    df_start_add<-left_join(df_start_add,df_start)
+    df_start_add<-df_start_add%>%filter(group_models>5)
+    df_start_add<-df_start_add%>%filter(group_models>v_start/1000)
+    df_start_add<-df_start_add%>%filter(group_models>=quantile(df_start_add$group_models,0.975))
+    print(paste0(w," ",df_start$name[w]," ",nrow(df_start_add)))
     if(nrow(df_start_add)>0){
       for(protein in 1:nrow(df_start_add)){
         
