@@ -67,7 +67,7 @@ df_start_all$orientarion[df_start_all$orientarion=="as WT"&df_start_all$RMSD<10]
 df_start_all<-df_start_all%>%select(name,orientarion,RMSD,frequence, RMSD,persent_align,group_models, angle,
                                     first_part_model,first_part_start,first_part_finish,second_part_model,second_part_start, 
                                     second_part_finish,group_number,bond_energy,bond_energy_fs)
-
+if(!dir.exists(paste0(part_start,"results/"))){dir.create(paste0(part_start,"results/"))}
 if(!dir.exists(paste0(part_start,"results/first_part/"))){dir.create(paste0(part_start,"results/first_part/"))}
 if(!dir.exists(paste0(part_start,"results/first_part/structure"))){dir.create(paste0(part_start,"results/first_part/structure"))}
 i<-1

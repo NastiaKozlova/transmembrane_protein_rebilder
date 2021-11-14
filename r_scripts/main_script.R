@@ -1,5 +1,4 @@
 part_start<-"path to transmembrane_protein_rebilder"
-part_start<-"/home/nastia/mem/storage/lacY/transmembrane_protein_rebilder/"
 
 #install.packages("dplyr")
 #install.packages("bio3d")
@@ -31,9 +30,10 @@ system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/convert_to_p
 
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/check_energy_add.R ",part_start),ignore.stdout=T,wait = T)
 
+system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/filter_pre_intercation_check_add.R ",part_start),ignore.stdout=T,wait = T)
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/check_interactions_add.R ",part_start),ignore.stdout=T,wait = T)
 
-system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/sort_structure_interactions.R ",part_start),ignore.stdout=T,wait = T)
-system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/TMD_add_7_analysis_top_a.R ",part_start),ignore.stdout=T,wait = T)
+system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/sort_structure_interactions_add.R ",part_start),ignore.stdout=T,wait = T)
+system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/TMD_analysis_add.R ",part_start),ignore.stdout=T,wait = T)
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/TMD_add_7_combine_files_RMSD_analysis.R ",part_start),ignore.stdout=T,wait = T)
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/TMD_add_7_fin_report.R ",part_start),ignore.stdout=T,wait = T)
