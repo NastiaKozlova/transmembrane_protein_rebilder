@@ -39,7 +39,7 @@ if(nrow(df_start)>1){
   }
 }
 df_groups<-df_start_all
-#df_groups<-df_groups%>%mutate(angle=angle*90/pi*2)
+df_groups<-df_groups%>%mutate(angle=angle*90/pi*2)
 df_groups<-df_groups%>%mutate(angle_mem=angle_mem*90/pi*2)
 df_groups<-df_groups%>%mutate(orientarion="between")
 df_groups$orientarion[abs(df_groups$angle)<60]<-"as WT"
