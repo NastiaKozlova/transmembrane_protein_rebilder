@@ -17,13 +17,9 @@ sort_structures<-function(df_start,i){
   
   df_start_all$orientarion[abs(df_start_all$angle)<60]<-"as WT"
   df_start_all$orientarion[abs(df_start_all$angle)>120]<-"inverted"
-  df_start_all$orientarion[df_start_all$orientarion=="as WT"&df_start_all$RMSD<10]<-"WT"
-  #  df_tost<-df_start_all%>%filter(orientarion=="WT")
-  #  df_tost$orientarion[df_tost$angle_mem<120&df_tost$angle_mem>60]<-"between"
+  df_start_all$orientarion[df_start_all$orientarion=="as WT"&df_start_all$RMSD<5]<-"WT"
   df_start_all$orientarion[abs(df_start_all$angle_mem)<45]<-"between"
-  
-  
-  
+
   test<-min(c(df_start$first_part_finish[i]-df_start$first_part_start[i],df_start$second_part_finish[i]-df_start$second_part_start[i]))
   if(test>50){
     df_start_all<-df_start_all%>%filter(orientarion!="between")
@@ -32,8 +28,9 @@ sort_structures<-function(df_start,i){
   df_start_all<-left_join(df_start_all,df_start)
   df_start_all<-df_start_all%>%filter(group_models>5)
   df_start_all<-df_start_all%>%filter(group_models>v_start/1000)
-  df_start_all<-df_start_all%>%filter(bond_energy<quantile(df_start_all$bond_energy,probs = 0.25))
   df_start_all<-df_start_all%>%filter(group_models>=quantile(df_start_all$group_models,0.95))
+  df_start_all<-df_start_all%>%filter(bond_energy<=quantile(df_start_all$bond_energy,probs = 0.25))
+
   df_start_all<-df_start_all%>%mutate(frequence=group_models/sum(df_start_all$group_models)*100)
   df_start_all<-df_start_all%>%mutate(RMSD=round(RMSD,digits = 2))
   df_start_all<-df_start_all%>%mutate(angle=round(angle,digits = 0))
