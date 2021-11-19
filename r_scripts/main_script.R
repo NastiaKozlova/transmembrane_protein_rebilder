@@ -1,5 +1,5 @@
 part_start<-"path to transmembrane_protein_rebilder"
-part_start<-"/home/nastia/mem/fast_storige/lacY/transmembrane_protein_rebilder/"
+
 setwd(part_start)
 #install.packages("dplyr")
 #install.packages("bio3d")
