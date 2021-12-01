@@ -27,8 +27,8 @@ reformat_data<-function(df_interactions,df_RMSD){
   df_interactions<-df_interactions%>%filter(number.x==df_interactions$number.x[1])
   return(df_interactions)  
 }  
-w<-1
-protein<-1
+w<-2
+protein<-2
 for(w in 1:nrow(df_start)){
   df_start_add<-read.csv(paste0(part,df_start$name[w],"/fin.csv"),stringsAsFactors = F)
   for(protein in 1:nrow(df_start_add)){
@@ -52,6 +52,9 @@ for(w in 1:nrow(df_start)){
           write.csv(df_interactions,paste0("compare_TEMP/",df_RMSD$number[j],".csv"),row.names = F)
  #       }
       }
+    }
+  }
+}
       print(Sys.time())
       write.csv(df_RMSD,paste0("df_RMSD_compare_interactions.csv"),row.names = F)
       
