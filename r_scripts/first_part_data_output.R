@@ -19,7 +19,7 @@ sort_structures<-function(df_start,i){
   df_start_all$orientarion[abs(df_start_all$angle)>120]<-"inverted"
   df_start_all$orientarion[df_start_all$orientarion=="as WT"&df_start_all$RMSD<5]<-"WT"
   df_start_all$orientarion[abs(df_start_all$angle_mem)<45]<-"between"
-
+  
   test<-min(c(df_start$first_part_finish[i]-df_start$first_part_start[i],df_start$second_part_finish[i]-df_start$second_part_start[i]))
   if(test>50){
     df_start_all<-df_start_all%>%filter(orientarion!="between")
@@ -29,8 +29,13 @@ sort_structures<-function(df_start,i){
   df_start_all<-df_start_all%>%filter(group_models>5)
   df_start_all<-df_start_all%>%filter(group_models>v_start/1000)
   df_start_all<-df_start_all%>%filter(group_models>=quantile(df_start_all$group_models,0.95))
-  df_start_all<-df_start_all%>%filter(bond_energy<=quantile(df_start_all$bond_energy,probs = 0.25))
-
+  if(length(df_start_all$orientarion[df_start_all$orientarion%in%"WT"])>0){
+    v_energy_test<-max(df_start_all$bond_energy_fs[df_start_all$orientarion%in%"WT"])
+    df_start_all<-df_start_all%>%filter(bond_energy_fs<=v_energy_test)
+  }else{
+    df_start_all<-df_start_all%>%filter(bond_energy_fs<=quantile(df_start_all$bond_energy_fs,probs = 0.25))
+  }
+  
   df_start_all<-df_start_all%>%mutate(frequence=group_models/sum(df_start_all$group_models)*100)
   df_start_all<-df_start_all%>%mutate(RMSD=round(RMSD,digits = 2))
   df_start_all<-df_start_all%>%mutate(angle=round(angle,digits = 0))
@@ -73,7 +78,7 @@ df_start_all<-df_start_all%>%mutate(persent_align=round(align_models/group_model
 #                                    orientarion,min_RMSD,max_RMSD)
 df_start_all<-df_start_all%>%select(name,orientarion,RMSD,frequence, RMSD,persent_align,group_models, angle,
                                     first_part_model,first_part_start,first_part_finish,second_part_model,second_part_start, 
-                                    second_part_finish,group_number,bond_energy,bond_energy_fs)
+                                    second_part_finish,group_number,bond_energy_fs)
 if(dir.exists(paste0(part_start,"results/"))) {system(command = paste0("rm -r ",part_start,"results/"),ignore.stdout=T,wait = T)}
 if(!dir.exists(paste0(part_start,"results/"))){dir.create(paste0(part_start,"results/"))}
 if(!dir.exists(paste0(part_start,"results/first_part/"))){dir.create(paste0(part_start,"results/first_part/"))}
