@@ -1,5 +1,7 @@
 #!/usr/bin/env R
 part_start = commandArgs(trailingOnly=TRUE)
+#path_to_PatchDock<-paste0(part_start,"programs/PatchDock/")
+#pach_dock_repeats<-1
 library(dplyr)
 library(bio3d)
 library(readr)
@@ -25,7 +27,7 @@ df_start<-df_start%>%filter(!is.na(name))
 
 w<-1
 for(w in 1:nrow(df_start)){
-  part_fin<-paste0(part,df_start$name[w],"/add_domain/",df_start$group_number[w],"/")
+  part_fin<-paste0(part,df_start$name[w],"/add_domain/",df_start$group_number[w])
   setwd(part_fin)
   if(!dir.exists(part_fin)){dir.create(part_fin)}
   if(dir.exists(part_fin)){
