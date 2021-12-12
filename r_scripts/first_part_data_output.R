@@ -18,7 +18,7 @@ sort_structures<-function(df_start,i){
   df_start_all$orientarion[abs(df_start_all$angle)<60]<-"as WT"
   df_start_all$orientarion[abs(df_start_all$angle)>120]<-"inverted"
   df_start_all$orientarion[df_start_all$orientarion=="as WT"&df_start_all$RMSD<5]<-"WT"
-  df_start_all$orientarion[abs(df_start_all$angle_mem)<45]<-"between"
+  df_start_all$orientarion[abs(df_start_all$angle_mem)<30]<-"between"
   
   test<-min(c(df_start$first_part_finish[i]-df_start$first_part_start[i],df_start$second_part_finish[i]-df_start$second_part_start[i]))
   if(test>50){

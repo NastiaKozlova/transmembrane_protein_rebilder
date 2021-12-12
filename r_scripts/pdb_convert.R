@@ -28,8 +28,8 @@ df_start<-df_start%>%filter(!is.na(name))
 w<-1
 for(w in 1:nrow(df_start)){
   part_fin<-paste0(part,df_start$name[w],"/add_domain/")
-  setwd(part_fin)
   if(!dir.exists(part_fin)){dir.create(part_fin)}
+  setwd(part_fin)
   pdb_1<-read.pdb(paste0(part_start,"results/first_part/structure/",df_start$name[w],"/",df_start$name[w],"_",df_start$group_number[w],".pdb"))
   df_start<-df_start%>%mutate(script=NA)
   if(!dir.exists(paste0(part_fin)))    { dir.create(paste0(part_fin))}
