@@ -27,7 +27,7 @@ df_start<-df_start%>%filter(!is.na(name))
 
 w<-1
 for(w in 1:nrow(df_start)){
-  part_fin<-paste0(part,df_start$name[w],"/add_domain/",df_start$group_number[w])
+  part_fin<-paste0(part,df_start$name[w],"/add_domain/",df_start$group_number[w],"/")
   if(!dir.exists(part_fin)){dir.create(part_fin)}
   setwd(part_fin)
   
