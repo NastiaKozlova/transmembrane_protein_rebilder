@@ -72,8 +72,10 @@ for(w in 1:nrow(df_start)){
       df_tcl[1,2]<-paste0('mol new {Energy/structure_psf/',df_RMSD$models[i],'.psf} type {psf}')
       df_tcl[1,3]<-paste0('mol addfile {Energy/structure_psf/',df_RMSD$models[i],'.pdb} type {pdb}') 
       df_tcl[1,4]<-paste0('set sel2 [atomselect top "protein"]')
-      df_tcl[1,5]<-paste0('set sel1 [atomselect top "protein and resid>=',df_start$first_part_start[w],' and resid<=',df_start$first_part_finish[w],'"]')
-      df_tcl[1,6]<-paste0('set sel3 [atomselect top "protein and resid>=',df_start$second_part_start[w],' and resid<=',df_start$second_part_finish[w],'"]')
+      df_tcl[1,5]<-paste0('set sel1 [atomselect top "protein and ',
+                          '((resid>=',df_start$first_part_start[w],' and resid<=',df_start$first_part_finish[w],')',
+                          ' or (resid>=',df_start$second_part_start[w],' and resid<=',df_start$second_part_finish[w],'))"]')
+      df_tcl[1,6]<-paste0('set sel3 [atomselect top "protein and resid>=',df_start$third_part_start[w],' and resid<=',df_start$third_part_finish[w],'"]')
       df_tcl[1,7]<-paste0('namdenergy -sel $sel2  -bond -angl -dihe -impr -conf -vdw -elec -nonb -all -cutoff 12 -skip 0 -ofile Energy/full/',df_RMSD$models[i],
                           ' -switch 10 -exe ',part_start,'programs/NAMD_2.14_Linux-x86_64-multicore/namd2 -par ',part_start,'start/toppar/par_all36_carb.prm -par ',
                           part_start,'start/toppar/par_all36_cgenff.prm -par ',part_start,'start/toppar/par_all36_lipid.prm -par ',part_start,
