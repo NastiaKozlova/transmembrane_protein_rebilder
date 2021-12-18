@@ -24,6 +24,7 @@ for(w in 1:nrow(df_start)){
 df_start<-df_start%>%filter(!is.na(name))
 
 w<-1
+i<-2
 for(w in 1:nrow(df_start)){
   part_fin<-paste0(part,df_start$name[w],"/add_domain/",df_start$group_number[w],"/")
   setwd(part_fin)
