@@ -135,7 +135,7 @@ for(w in 1:nrow(df_start)){
       
       pdb<-read.pdb(paste0("structure/",df_RMSD$models[i])) 
       df_pdb<-pdb$atom
-      v_pdb<-unique(df_pdb$resno)
+      v_pdb<-c(df_start$third_part_start[w]:df_start$third_part_finish[w])
       pdb.int<-atom.select(pdb,resno = v_pdb,elety="CA")
       pdb<-trim.pdb(pdb,pdb.int)
       pdb_com.int<-atom.select(pdb_com,resno = v_pdb,elety="CA")
