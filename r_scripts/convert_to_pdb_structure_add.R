@@ -1,7 +1,7 @@
 #!/usr/bin/env R
 part_start = commandArgs(trailingOnly=TRUE)
-path_to_PatchDock<-paste0(part_start,"programs/PatchDock/")
-pach_dock_repeats<-1
+#path_to_PatchDock<-paste0(part_start,"programs/PatchDock/")
+#pach_dock_repeats<-1
 library(dplyr)
 library(bio3d)
 library(readr)
@@ -111,15 +111,14 @@ for(w in 1:nrow(df_start)){
     pdb_3<-trim.pdb(pdb,pdb.int)
     pdb<-cat.pdb(pdb_1,pdb_2,pdb_3,renumber = F,rechain = F)
     write.pdb(pdb,paste0("structure/",df_RMSD$models[i]))
+    pdb.int<-atom.select(pdb,resno = c(df_start$first_part_start[w]:df_start$first_part_finish[w],
+                                       df_start$second_part_start[w]:df_start$second_part_finish[w]))
+    pdb_1<-trim.pdb(pdb,pdb.int)
+    pdb.int<-atom.select(pdb,resno = c(df_start$third_part_start[w]:df_start$third_part_finish[w]))
+    pdb_2<-trim.pdb(pdb,pdb.int)                     
     bs1<-binding.site(a=pdb_1,b=pdb_2)
     bs2<-binding.site(a=pdb_2,b=pdb_1)
-    bs3<-binding.site(a=pdb_3,b=pdb_2)
-    bs4<-binding.site(a=pdb_2,b=pdb_3)
-    bs5<-binding.site(a=pdb_1,b=pdb_3)
-    bs6<-binding.site(a=pdb_3,b=pdb_1)
-    bs<-unique(c(bs1$resnames,bs2$resnames,
-                 bs3$resnames,bs4$resnames,
-                 bs5$resnames,bs6$resnames))
+    bs<-unique(c(bs1$resnames,bs2$resnames))
     if(length(bs>2)){
       df_interactions<-data.frame(matrix(ncol=1,nrow = length(bs)))
       colnames(df_interactions)<-"full_amino_name"
@@ -147,4 +146,3 @@ for(w in 1:nrow(df_start)){
   df_RMSD<-df_RMSD%>%filter(!is.na(RMSD))
   write.csv(df_RMSD,"df_RMSD.csv",row.names = F)
 }
-
