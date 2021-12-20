@@ -140,7 +140,7 @@ for(w in 1:nrow(df_start)){
       pdb<-trim.pdb(pdb,pdb.int)
       pdb_com.int<-atom.select(pdb_com,resno = v_pdb,elety="CA")
       pdb_sep<-trim.pdb(pdb_com,pdb_com.int)
-      df_RMSD$RMSD[i]<-rmsd(pdb_sep,pdb,fit=T)
+      df_RMSD$RMSD[i]<-rmsd(pdb_sep,pdb,fit=F)
     }
   }
   df_RMSD<-df_RMSD%>%filter(!is.na(RMSD))
