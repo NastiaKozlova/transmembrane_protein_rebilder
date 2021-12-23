@@ -43,18 +43,16 @@ for(w in 1:nrow(df_start)){
       v_sort<-list.files("compare_interaction/")
       df_RMSD<-df_RMSD[df_RMSD$models%in%v_sort,]
       for (j in 1:nrow(df_RMSD)) {
-#        if(file.exists(paste0("compare_interaction/",df_RMSD$models[j]))){
-          df_interactions<-read.csv(paste0("compare_interaction/",df_RMSD$models[j]),stringsAsFactors = F)
-          df_interactions<-df_interactions%>%filter(persent.x>50)
-          df_interactions<-df_interactions%>%filter(persent.y>50)
-          df_RMSD$number_paired_models[j]<-nrow(df_interactions)
-          df_interactions<-df_interactions%>%filter(number.x<number.y) 
-          write.csv(df_interactions,paste0("compare_TEMP/",df_RMSD$number[j],".csv"),row.names = F)
- #       }
+        #        if(file.exists(paste0("compare_interaction/",df_RMSD$models[j]))){
+        df_interactions<-read.csv(paste0("compare_interaction/",df_RMSD$models[j]),stringsAsFactors = F)
+        df_interactions<-df_interactions%>%filter(persent.x>50)
+        df_interactions<-df_interactions%>%filter(persent.y>50)
+        df_RMSD$number_paired_models[j]<-nrow(df_interactions)
+        df_interactions<-df_interactions%>%filter(number.x<number.y) 
+        write.csv(df_interactions,paste0("compare_TEMP/",df_RMSD$number[j],".csv"),row.names = F)
+        
       }
-    }
-  }
-}
+      
       print(Sys.time())
       write.csv(df_RMSD,paste0("df_RMSD_compare_interactions.csv"),row.names = F)
       
