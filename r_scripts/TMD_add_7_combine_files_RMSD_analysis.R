@@ -29,12 +29,11 @@ for(w in 1:nrow(df_start)){
 df_start<-df_start%>%filter(!is.na(name))
 
 w<-1
-for (name in 1:nrow(df_start)) {
+for (w in 1:nrow(df_start)) {
   part_fin<-paste0(part,df_start$name[w],"/add_domain/",df_start$group_number[w],"/")
   if(!dir.exists(part_fin)){dir.create(part_fin)}
   setwd(part_fin)
   if (!dir.exists("RMSD/")){dir.create("RMSD/")}
-#  print(paste0("start ",Sys.time()))
   v_RMSD_files<-list.files(paste0("RMSD/"))
   if(length(v_RMSD_files)>0){
     df_RMSD<-read.csv(paste0("RMSD/",v_RMSD_files[1]),stringsAsFactors = F)
@@ -43,10 +42,8 @@ for (name in 1:nrow(df_start)) {
       df_RMSD_add<-read.csv(paste0("RMSD/",v_RMSD_files[i]),stringsAsFactors = F)
       df_RMSD_add<-df_RMSD_add%>%filter(RMSD<v_RMSD)
       df_RMSD<-rbind(df_RMSD,df_RMSD_add)
-      
     }
-    print(paste0("finish ",Sys.time()))
     write.csv(df_RMSD,"df_RMSD_all.csv",row.names = F)
+    rm(df_RMSD)
   }
-#  print(paste0("start ",Sys.time()))
 }
