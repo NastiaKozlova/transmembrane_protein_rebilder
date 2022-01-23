@@ -22,6 +22,8 @@ system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/TMD_no_7_com
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/TMD_no_7_fin_report.R ",part_start),ignore.stdout=T,wait = T)
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/first_part_data_output.R ",part_start),ignore.stdout=T,wait = T)
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/TMD_interactions.R ",part_start),ignore.stdout=T,wait = T)
+system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/plot_TMD_interactions.R ",part_start),ignore.stdout=T,wait = T)
+
 #system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/remove_extra_files.R ",part_start),ignore.stdout=T,wait = T)
 
 #prepare pdb and run PatchDOCK second time

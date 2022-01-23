@@ -115,7 +115,7 @@ for (w in 1:nrow(df_start)) {
         }
         df_groups<-df_groups%>%mutate(name=df_start$name[w])
         df_groups<-left_join(df_groups,df_RMSD_control,by=c("best_model"="number"))
-        df_groups<-left_join(df_groups,df_energy,by=c("models", "max_length","min_length"))#,   "min_length","RMSD" ))
+        df_groups<-left_join(df_groups,df_energy,by=c("models", "max_length", "min_length"))
         write.csv(df_groups,file = paste0("fin_TEMP.csv"),row.names = F)   
       }
       
@@ -125,8 +125,8 @@ for (w in 1:nrow(df_start)) {
         df_groups<-df_groups%>%filter(group_models>5)
         df_groups<-df_groups%>%arrange(desc(group_models))
         
-        v_moving_start<-min(df_start$first_part_start[w],df_start$second_part_start[w])
-        v_moving_finish<-min(df_start$first_part_finish[w],df_start$second_part_finish[w])
+        v_moving_start<-df_start$third_part_start[w]
+        v_moving_finish<-df_start$third_part_finish[w]
         
         df_topology_TEST<-df_topology%>%filter(seq_beg>=v_moving_start)
         if (df_topology_TEST$seq_beg[1]>min(df_topology$seq_beg)) {
