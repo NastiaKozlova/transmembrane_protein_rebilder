@@ -144,6 +144,6 @@ df_start_all<-df_start_all%>%mutate(first_part_group_number=as.character(first_p
 df_start_all<-df_start_all%>%mutate(second_part_group_number=as.character(second_part_group_number))
 p<-ggplot(data=df_start_all)+
   #  geom_text(aes(x=first_part_group_number,y=second_part_group_number,label=orientation))+
-  geom_text(aes(x=first_part_orientarion,y=second_part_orientarion,label=second_part_persent_align))+
+  geom_text(aes(x=first_part_orientarion,y=second_part_orientarion,label=second_part_frequence))+
   facet_grid(first_second~third_part_model,labeller = labeller(.rows = label_both, .cols = label_both))+theme_bw()
 ggsave(p,filename = paste0(part_start,"results/all_parts_rebilder.png"), width = 20, height = 20, units = c("cm"), dpi = 200 ) 
