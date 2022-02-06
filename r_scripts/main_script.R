@@ -40,3 +40,5 @@ system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/TMD_add_7_an
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/TMD_add_7_combine_files_RMSD_analysis.R ",part_start),ignore.stdout=T,wait = T)
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/TMD_add_7_fin_report.R ",part_start),ignore.stdout=T,wait = T)
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/second_part_data_output.R ",part_start),ignore.stdout=T,wait = T)
+system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/second_part_TMD_interactions.R ",part_start),ignore.stdout=T,wait = T)
+system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/second_part_plot_TMD_interactions.R ",part_start),ignore.stdout=T,wait = T)

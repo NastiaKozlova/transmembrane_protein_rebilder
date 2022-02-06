@@ -134,6 +134,7 @@ for (i in 1:nrow(df_start_all)) {
                         "/fin_str/",df_start_all$second_part_group_number[i],".pdb"))){
     pdb<-read.pdb(paste0(part,df_start_all$name[i],"/add_domain/",df_start_all$first_part_group_number[i],
                          "/fin_str/",df_start_all$second_part_group_number[i],".pdb"))
+    pdb$atom$chain<-"A"
     write.pdb(pdb,paste0(part_start,"results/second_part/structure/",df_start_all$name[i],"/first_part_",df_start_all$first_part_group_number[i],
                                                                             "_second_part_",df_start_all$second_part_group_number[i],".pdb"))
   }else(print(i))
