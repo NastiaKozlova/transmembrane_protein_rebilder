@@ -21,8 +21,8 @@ system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/TMD_no_7_ana
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/TMD_no_7_combine_files_RMSD_analysis.R ",part_start),ignore.stdout=T,wait = T)
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/TMD_no_7_fin_report.R ",part_start),ignore.stdout=T,wait = T)
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/first_part_data_output.R ",part_start),ignore.stdout=T,wait = T)
-system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/TMD_interactions.R ",part_start),ignore.stdout=T,wait = T)
-system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/plot_TMD_interactions.R ",part_start),ignore.stdout=T,wait = T)
+system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/first_part_TMD_interactions.R ",part_start),ignore.stdout=T,wait = T)
+system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/first_part_plot_TMD_interactions.R ",part_start),ignore.stdout=T,wait = T)
 
 #system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/remove_extra_files.R ",part_start),ignore.stdout=T,wait = T)
 
@@ -43,3 +43,5 @@ system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/second_part_
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/second_part_TMD_interactions.R ",part_start),ignore.stdout=T,wait = T)
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/second_part_plot_TMD_interactions.R ",part_start),ignore.stdout=T,wait = T)
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/control_plot_TMD_interactions.R ",part_start),ignore.stdout=T,wait = T)
+system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/second_part_compare_control_exprement_interactions.R ",part_start),ignore.stdout=T,wait = T)
+system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/first_part_compare_control_exprement_interactions.R ",part_start),ignore.stdout=T,wait = T)
