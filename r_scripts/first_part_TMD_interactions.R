@@ -52,21 +52,28 @@ i<-1
 j<-1
 for (i in 1:nrow(df_start)) {
   if (file.exists(paste0("results/first_part/ring/",df_start$name[i],"_",df_start$group_number[i],".txt"))){
+    pdb<-read.pdb(paste0("results/first_part/structure/",df_start$name[i],"/",df_start$name[i],"_",df_start$group_number[i],".pdb"))
+    df_pdb<-pdb$atom
+    df_pdb<-df_pdb%>%select(resid,resno)
+    df_pdb<-unique(df_pdb)
     df_ring<-read.csv(paste0("results/first_part/ring/",df_start$name[i],"_",df_start$group_number[i],".txt"),stringsAsFactors = F) 
     for (j in 1:nrow(df_ring)) {
       df_ring$NodeId1[j]<-strsplit(df_ring$NodeId1[j],split = ":",fixed = T)[[1]][2]
       df_ring$NodeId2[j]<-strsplit(df_ring$NodeId2[j],split = ":",fixed = T)[[1]][2]
       df_ring$Interaction[j]<-strsplit(df_ring$Interaction[j],split = ":",fixed = T)[[1]][1]
     }  
-    df_ring<-df_ring%>%select(NodeId1,NodeId2)
+    df_ring<-df_ring%>%select(NodeId1,NodeId2,Interaction)
     df_ring<-unique(df_ring)
     df_ring$NodeId1<-as.numeric(df_ring$NodeId1)
     df_ring$NodeId2<-as.numeric(df_ring$NodeId2)
-#    df_ring<-df_ring%>%filter(NodeId1>=df_start$first_part_start[i])
-#    df_ring<-df_ring%>%filter(NodeId1<=df_start$first_part_finish[i])
-#    df_ring<-df_ring%>%filter(NodeId2>=df_start$second_part_start[i])
-#    df_ring<-df_ring%>%filter(NodeId2<=df_start$second_part_finish[i])
+    
+    df_ring<-left_join(df_ring,df_pdb,by=c("NodeId1"="resno"))
+    df_ring<-left_join(df_ring,df_pdb,by=c("NodeId2"="resno"))
+    colnames(df_ring)<-c("NodeId1", "NodeId2", "Interaction", "resid_1",     "resid_2")
+    
+    
     write.csv(df_ring,paste0("results/first_part/interactions/",df_start$name[i],"_",df_start$group_number[i],".txt"),row.names = F)
+    df_ring<-df_ring%>%select(NodeId1,NodeId2)
     
     df_ring<-left_join(df_ring,df_seq,by=c("NodeId1"="amino" ))
     df_ring<-left_join(df_ring,df_seq,by=c("NodeId2"="amino" ))
