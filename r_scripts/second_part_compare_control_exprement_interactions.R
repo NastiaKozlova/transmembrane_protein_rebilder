@@ -41,6 +41,21 @@ for (i in 1:nrow(df_second_part)) {
   df_second_part$anti_control[i]<-nrow(df_second_part_anti_control)
   df_second_part$anti_experiment[i]<-nrow(df_second_part_anti_experiment)
   df_second_part$semi[i]<-nrow(df_second_part_semi)
+  
+  df_second_part_all<-df_second_part_all%>%mutate(Domain_1=NA)
+  df_second_part_all<-df_second_part_all%>%mutate(Domain_2=NA)
+  df_second_part_all$Domain_1[df_second_part_all$NodeId1%in%c(df_second_part$first_part_start[i]:df_second_part$first_part_finish[i])]<-df_second_part$first_part_model[i]
+  df_second_part_all$Domain_1[df_second_part_all$NodeId1%in%c(df_second_part$second_part_start[i]:df_second_part$second_part_finish[i])]<-df_second_part$second_part_model[i]
+  df_second_part_all$Domain_1[df_second_part_all$NodeId1%in%c(df_second_part$third_part_start[i]:df_second_part$third_part_finish[i])]<-df_second_part$third_part_finish[i]
+  
+  
+  df_second_part_all$Domain_2[df_second_part_all$NodeId2%in%c(df_second_part$first_part_start[i]:df_second_part$first_part_finish[i])]<-df_second_part$first_part_model[i]
+  df_second_part_all$Domain_2[df_second_part_all$NodeId2%in%c(df_second_part$second_part_start[i]:df_second_part$second_part_finish[i])]<-df_second_part$second_part_model[i]
+  df_second_part_all$Domain_2[df_second_part_all$NodeId2%in%c(df_second_part$third_part_start[i]:df_second_part$third_part_finish[i])]<-df_second_part$third_part_finish[i]
+  
+  
+  df_second_part_all<-df_second_part_all%>%filter(Domain_1!=Domain_2)
+  
   p<-ggplot()+
     
     geom_rect(aes(xmin=df_second_part$first_part_start[i],xmax=df_second_part$first_part_finish[i],ymin=-Inf,ymax=Inf,alpha=0.5))+
