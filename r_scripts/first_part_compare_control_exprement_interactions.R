@@ -15,6 +15,8 @@ df_first_part<-df_first_part%>%mutate(anti_control=NA)
 df_first_part<-df_first_part%>%mutate(anti_experiment=NA)
 df_first_part<-df_first_part%>%mutate(semi=NA)
 i<-1
+if(!dir.exists("results/first_part/plot/")){dir.create("results/first_part/plot/")}
+if(!dir.exists("results/first_part/plot/analysis/")){dir.create("results/first_part/plot/analysis/")}
 for (i in 1:nrow(df_first_part)) {
   v_first_part<-c(#df_first_part$third_part_start[i]:df_first_part$third_part_finish[i],
                    df_first_part$first_part_start[i]:df_first_part$first_part_finish[i],
