@@ -42,22 +42,23 @@ for(w in 1:nrow(df_start)){
   pdb_f<-trim(start,pdb_f.int)
   pdb_f$atom$chain <- "Z"
   write.pdb(pdb_f,paste0(part_fin,df_start$group_number[w],"/ligand.pdb"))
-  df_start$script[w]<-paste0("cd ",part_fin,df_start$group_number[w],"/patchdock/\n",
-                             path_to_PatchDock,"buildParamsFine.pl ","../receptor.pdb ", "../ligand.pdb 2.0 EI\n",
-                             path_to_PatchDock,"patch_dock.Linux params.txt out.txt\n")
-  system(command=df_start$script[w],ignore.stdout=T,wait = T,intern=F,ignore.stderr = T)
-  if(file.exists(paste0(part_fin,df_start$group_number[w],"/patchdock/out.txt"))){
-    df_out<-read_table(paste0(part_fin,df_start$group_number[w],"/patchdock/out.txt"),skip = 26,skip_empty_rows = T,col_names = F)
-    df_out<-df_out%>%select(X1, X3, X5, X7, X9, X11, X13, X15, X17, X19, X21, X23)
-    colnames(df_out)<-c("number", "score", "pen.", "Area", "as1", "as2", "as12", "ACE", "hydroph", "Energy", "cluster", "dist.")
-    n_structure<-nrow(df_out)
-    a<-paste0("cd ",part_fin,df_start$group_number[w],"/patchdock/\n",
-              path_to_PatchDock,"transOutput.pl out.txt 0 ",nrow(df_out),"\n",
-              "rm out.txt\n",
-              "rm params.txt \n rm patch_dock.log\n",collapse = "")
-    system(command=a,ignore.stdout=T,wait = T,intern=F,ignore.stderr = T)
-    write.csv(df_out,paste0(part_fin,df_start$group_number[w],"/out.csv"),row.names = F)
+  if(!file.exists(paste0(part_fin,df_start$group_number[w],"/patchdock/out.txt"))){
+    df_start$script[w]<-paste0("cd ",part_fin,df_start$group_number[w],"/patchdock/\n",
+                               path_to_PatchDock,"buildParamsFine.pl ","../receptor.pdb ", "../ligand.pdb 2.0 EI\n",
+                               path_to_PatchDock,"patch_dock.Linux params.txt out.txt\n")
+    system(command=df_start$script[w],ignore.stdout=T,wait = T,intern=F,ignore.stderr = T)
+    if(file.exists(paste0(part_fin,df_start$group_number[w],"/patchdock/out.txt"))){
+      df_out<-read_table(paste0(part_fin,df_start$group_number[w],"/patchdock/out.txt"),skip = 26,skip_empty_rows = T,col_names = F)
+      df_out<-df_out%>%select(X1, X3, X5, X7, X9, X11, X13, X15, X17, X19, X21, X23)
+      colnames(df_out)<-c("number", "score", "pen.", "Area", "as1", "as2", "as12", "ACE", "hydroph", "Energy", "cluster", "dist.")
+      n_structure<-nrow(df_out)
+      a<-paste0("cd ",part_fin,df_start$group_number[w],"/patchdock/\n",
+                path_to_PatchDock,"transOutput.pl out.txt 0 ",nrow(df_out),"\n",
+                "rm out.txt\n",
+                "rm params.txt \n rm patch_dock.log\n",collapse = "")
+      system(command=a,ignore.stdout=T,wait = T,intern=F,ignore.stderr = T)
+      write.csv(df_out,paste0(part_fin,df_start$group_number[w],"/out.csv"),row.names = F)
+    }
   }
 }
-
 
