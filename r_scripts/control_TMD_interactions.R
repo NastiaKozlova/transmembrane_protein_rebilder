@@ -10,7 +10,7 @@ df_topology<-read.csv("start/df_topology.csv",stringsAsFactors = F)
 df_start<-data.frame(matrix(ncol=1,nrow = 1))
 colnames(df_start)<-"pdb_name"
 df_start$pdb_name<-c("start")
-pdb<-read.pdb(paste0(part_start,"start/",df_start$pdb_name[i],".pdb"))
+pdb<-read.pdb(paste0(part_start,"start/",df_start$pdb_name[1],".pdb"))
 df_pdb<-pdb$atom
 df_pdb<-df_pdb%>%select(resid,resno)
 df_pdb<-unique(df_pdb)
