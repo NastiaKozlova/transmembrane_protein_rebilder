@@ -44,6 +44,6 @@ system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/second_part_
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/second_part_plot_TMD_interactions.R ",part_start),ignore.stdout=T,wait = T)
 
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/control_TMD_interactions.R ",part_start),ignore.stdout=T,wait = T)
-system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/control_plot_TMD_interactions.R ",part_start),ignore.stdout=T,wait = T)
+
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/second_part_compare_control_exprement_interactions.R ",part_start),ignore.stdout=T,wait = T)
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/first_part_compare_control_exprement_interactions.R ",part_start),ignore.stdout=T,wait = T)
