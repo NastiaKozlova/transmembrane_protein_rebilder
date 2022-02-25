@@ -42,7 +42,7 @@ for(w in 1:nrow(df_start)){
   pdb_f<-trim(start,pdb_f.int)
   pdb_f$atom$chain <- "Z"
   write.pdb(pdb_f,paste0(part_fin,df_start$group_number[w],"/ligand.pdb"))
-  if(!file.exists(paste0(part_fin,df_start$group_number[w],"/patchdock/out.txt"))){
+  if(!file.exists(paste0(part_fin,df_start$group_number[w],"/out.csv"))){
     df_start$script[w]<-paste0("cd ",part_fin,df_start$group_number[w],"/patchdock/\n",
                                path_to_PatchDock,"buildParamsFine.pl ","../receptor.pdb ", "../ligand.pdb 2.0 EI\n",
                                path_to_PatchDock,"patch_dock.Linux params.txt out.txt\n")
