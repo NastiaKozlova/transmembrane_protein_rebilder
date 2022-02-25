@@ -5,7 +5,7 @@ library(bio3d)
 library(readr)
 setwd(part_start)
 
-i<-1
+i<-3
 sort_structures<-function(df_start,i){
   v_start<-length(list.files(paste0(df_start$name[i],"/structure")))
   df_start_all<-read.csv(paste0(df_start$name[i],"/fin.csv"),stringsAsFactors = F)
@@ -28,11 +28,14 @@ sort_structures<-function(df_start,i){
   df_start_all<-left_join(df_start_all,df_start)
   df_start_all<-df_start_all%>%filter(group_models>5)
   df_start_all<-df_start_all%>%filter(group_models>v_start/1000)
-  df_start_all<-df_start_all%>%filter(group_models>=quantile(df_start_all$group_models,0.95))
   if(length(df_start_all$orientarion[df_start_all$orientarion%in%"WT"])>0){
+    min_group_size<-max(df_start_all$group_models[df_start_all$orientarion%in%"WT"])
+    df_start_all<-df_start_all%>%filter(group_models>=min_group_size)
     v_energy_test<-max(df_start_all$bond_energy_fs[df_start_all$orientarion%in%"WT"])
     df_start_all<-df_start_all%>%filter(bond_energy_fs<=v_energy_test)
+    df_start_all<-df_start_all%>%filter(group_models>v_start/100)
   }else{
+    df_start_all<-df_start_all%>%filter(group_models>=quantile(df_start_all$group_models,0.95))
     df_start_all<-df_start_all%>%filter(bond_energy_fs<=quantile(df_start_all$bond_energy_fs,probs = 0.25))
   }
   
