@@ -6,7 +6,8 @@ library(readr)
 library(ggplot2)
 
 setwd(part_start)
-
+prot_name<-strsplit(part_start,split = "/")[[1]]
+prot_name<-prot_name[length(prot_name)-1]
 i<-2
 sort_structures<-function(df_start,i){
   v_start<-length(list.files(paste0(df_start$name[i],"/add_domain/",df_start$first_part_group_number[i],"/structure/")))
@@ -143,8 +144,27 @@ df_start_all<-df_start_all%>%mutate(first_second=paste0(first_part_model,"-",sec
 df_start_all<-df_start_all%>%mutate(orientation=paste0(first_part_orientarion,"-",second_part_orientarion))
 df_start_all<-df_start_all%>%mutate(first_part_group_number=as.character(first_part_group_number))
 df_start_all<-df_start_all%>%mutate(second_part_group_number=as.character(second_part_group_number))
+df_angle<-data.frame(matrix(ncol=2,nrow=4))
+colnames(df_angle)<-c("orientation","angle")
+df_angle$orientation<- c("between","WT","as WT","inverted")
+df_angle$angle<- c(90,0,0,180)
+df_start_all<-left_join(df_start_all,df_angle,by=c("first_part_orientarion"="orientation"))
+df_start_all<-left_join(df_start_all,df_angle,by=c("second_part_orientarion"="orientation"))
+
+df_start_all<-df_start_all%>%mutate(plot_name=paste(first_part_group_number,second_part_group_number))
+df_start_all<-df_start_all%>%mutate(first_part_center=(first_part_start+first_part_finish)/2)
+df_start_all<-df_start_all%>%mutate(second_part_center=(second_part_start+second_part_finish)/2)
+df_start_all<-df_start_all%>%mutate(third_part_center=(third_part_start+third_part_finish)/2)
+
 p<-ggplot(data=df_start_all)+
-  #  geom_text(aes(x=first_part_group_number,y=second_part_group_number,label=orientation))+
-  geom_text(aes(y=first_part_orientarion,x=second_part_orientarion,label=second_part_frequence))+
-  facet_grid(first_second~third_part_model,labeller = labeller(.rows = label_both, .cols = label_both))+theme_bw()
-ggsave(p,filename = paste0(part_start,"results/all_parts_rebilder.png"), width = 20, height = 20, units = c("cm"), dpi = 200 ) 
+  geom_text(aes(x=first_part_center,y=plot_name,label=first_part_model,angle=0,color="1"))+
+  geom_text(aes(x=second_part_center,y=plot_name,label=second_part_model,angle=angle.x,color="2"))+
+  geom_text(aes(x=third_part_center,y=plot_name,label=third_part_model,angle=angle.y,color="3"))+
+  
+  geom_segment(aes(x=first_part_start,xend=first_part_finish,y=plot_name,yend=plot_name,color="1"))+
+  geom_segment(aes(x=second_part_start,xend=second_part_finish,y=plot_name,yend=plot_name,color="2"))+
+  geom_segment(aes(x=third_part_start,xend=third_part_finish,y=plot_name,yend=plot_name,color="3"))+
+  scale_y_discrete(breaks = NULL,labels = NULL)+
+  scale_x_continuous(breaks = NULL,labels = NULL)+
+  facet_grid(name~.,scales = "free", space = "free")+theme_bw()
+ggsave(p,filename = paste0(part_start,"results/",prot_name,"_all_parts_rebilder.png"), width = 20, height = 20, units = c("cm"), dpi = 200 ) 
