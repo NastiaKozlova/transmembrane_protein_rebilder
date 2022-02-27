@@ -3,6 +3,7 @@ part_start = commandArgs(trailingOnly=TRUE)
 library(dplyr)
 library(bio3d)
 library(readr)
+library(ggplot2)
 setwd(part_start)
 setwd(part_start)
 prot_name<-strsplit(part_start,split = "/")[[1]]
@@ -76,9 +77,6 @@ df_start_all<-df_start_all%>%mutate(frequence=round(frequence,digits = 1))
 df_start_all<-df_start_all%>%mutate(angle=round(angle,digits = 0))
 df_start_all<-df_start_all%>%mutate(persent_align=round(align_models/group_models*100,digits = 1))
 
-#df_start_all<-df_start_all%>%select(name,group_number,group_models,align_models,name,      
-#                                    RMSD,bond_energy,bond_energy_fs,angle,angle_mem,
-#                                    orientarion,min_RMSD,max_RMSD)
 df_start_all<-df_start_all%>%select(name,orientarion,RMSD,frequence, RMSD,persent_align,group_models, angle,
                                     first_part_model,first_part_start,first_part_finish,second_part_model,second_part_start, 
                                     second_part_finish,group_number,bond_energy_fs)
@@ -96,28 +94,23 @@ for (i in 1:nrow(df_start_all)) {
   }else(print(i))
 }
 df_start_all<-df_start_all%>%mutate(first_second=paste0(first_part_model,"-",second_part_model))
-#df_start_all<-df_start_all%>%mutate(orientation=paste0(first_part_orientarion,"-",second_part_orientarion))
 df_start_all<-df_start_all%>%mutate(first_part_group_number=as.character(group_number))
 df_start_all$angle<-NULL
-#df_start_all<-df_start_all%>%mutate(second_part_group_number=as.character(second_part_group_number))
 df_angle<-data.frame(matrix(ncol=2,nrow=4))
 colnames(df_angle)<-c("orientation","angle")
 df_angle$orientation<- c("between","WT","as WT","inverted")
 df_angle$angle<- c(90,0,0,180)
 df_start_all<-left_join(df_start_all,df_angle,by=c("orientarion"="orientation"))
-#df_start_all<-left_join(df_start_all,df_angle,by=c("second_part_orientarion"="orientation"))
 
 df_start_all<-df_start_all%>%mutate(plot_name=paste(group_number))
 df_start_all<-df_start_all%>%mutate(first_part_center=(first_part_start+first_part_finish)/2)
 df_start_all<-df_start_all%>%mutate(second_part_center=(second_part_start+second_part_finish)/2)
-#df_start_all<-df_start_all%>%mutate(third_part_center=(third_part_start+third_part_finish)/2)
-
+v_min<-min(df_start_all$first_part_start,df_start_all$second_part_start)
+v_max<-max(df_start_all$first_part_finish,df_start_all$second_part_finish)
 p<-ggplot(data=df_start_all)+
   geom_text(aes(x=first_part_center,y=plot_name,label=first_part_model,angle=0,color="1"))+
   geom_text(aes(x=second_part_center,y=plot_name,label=second_part_model,angle=angle,color="2"))+
-  geom_segment(aes(x=first_part_start,xend=first_part_finish,y=plot_name,yend=plot_name,color="1"))+
-  geom_segment(aes(x=second_part_start,xend=second_part_finish,y=plot_name,yend=plot_name,color="2"))+
   scale_y_discrete(breaks = NULL,labels = NULL)+
-  scale_x_continuous(breaks = NULL,labels = NULL)+
+  scale_x_continuous(breaks = NULL,labels = NULL,limits = c(v_min,v_max))+
   facet_grid(name~.,scales = "free", space = "free")+theme_bw()
 ggsave(p,filename = paste0(part_start,"results/",prot_name,"_first_part_rebilder.png"), width = 20, height = 20, units = c("cm"), dpi = 200 ) 

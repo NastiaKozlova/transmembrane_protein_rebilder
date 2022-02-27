@@ -161,9 +161,9 @@ p<-ggplot(data=df_start_all)+
   geom_text(aes(x=second_part_center,y=plot_name,label=second_part_model,angle=angle.x,color="2"))+
   geom_text(aes(x=third_part_center,y=plot_name,label=third_part_model,angle=angle.y,color="3"))+
   
-  geom_segment(aes(x=first_part_start,xend=first_part_finish,y=plot_name,yend=plot_name,color="1"))+
-  geom_segment(aes(x=second_part_start,xend=second_part_finish,y=plot_name,yend=plot_name,color="2"))+
-  geom_segment(aes(x=third_part_start,xend=third_part_finish,y=plot_name,yend=plot_name,color="3"))+
+ # geom_segment(aes(x=first_part_start,xend=first_part_finish,y=plot_name,yend=plot_name,color="1"))+
+ # geom_segment(aes(x=second_part_start,xend=second_part_finish,y=plot_name,yend=plot_name,color="2"))+
+ # geom_segment(aes(x=third_part_start,xend=third_part_finish,y=plot_name,yend=plot_name,color="3"))+
   scale_y_discrete(breaks = NULL,labels = NULL)+
   scale_x_continuous(breaks = NULL,labels = NULL)+
   facet_grid(name~.,scales = "free", space = "free")+theme_bw()
