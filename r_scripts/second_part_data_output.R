@@ -6,6 +6,7 @@ library(readr)
 library(ggplot2)
 
 setwd(part_start)
+df_plot_name<-read.csv("start/domain_name.csv",stringsAsFactors =  F)
 prot_name<-strsplit(part_start,split = "/")[[1]]
 prot_name<-prot_name[length(prot_name)-1]
 i<-2
@@ -156,15 +157,33 @@ df_start_all<-df_start_all%>%mutate(first_part_center=(first_part_start+first_pa
 df_start_all<-df_start_all%>%mutate(second_part_center=(second_part_start+second_part_finish)/2)
 df_start_all<-df_start_all%>%mutate(third_part_center=(third_part_start+third_part_finish)/2)
 
+df_start_all<-left_join(x = df_start_all,y = df_plot_name,by=c("first_part_model"="part_name"))
+df_start_all<-df_start_all%>%mutate(first_plot_name=fin_name)
+df_start_all$fin_name<-NULL
+df_start_all<-left_join(x = df_start_all,y = df_plot_name,by=c("second_part_model"="part_name"))
+df_start_all<-df_start_all%>%mutate(second_plot_name=fin_name)
+df_start_all$fin_name<-NULL
+df_start_all<-left_join(x = df_start_all,y = df_plot_name,by=c("third_part_model"="part_name"))
+df_start_all<-df_start_all%>%mutate(third_plot_name=fin_name)
+df_start_all$fin_name<-NULL
+df_start_all<-df_start_all%>%mutate(frequence=paste0(first_part_frequence,"\n",second_part_frequence))
+#df_start<-df_start_all%>%select(name,orientation,frequence, plot_name,        
+#                                first_part_group_number,
+#                                angle.x,angle.y,
+#                                first_part_center,second_part_center,third_part_center,
+#                                first_plot_name,   second_plot_name,third_plot_name)
+#df_start<-df_start%>%mutate(frequence=paste0(first_part_frequence,"\n",second_part_frequence))
+
+#df_start<-df_start%>%mutate(plot_name=paste0(first_plot_name,"-",   second_plot_name))
+#colnames(df_start_all)<-+
+df_start_all<-df_start_all%>%mutate(name=paste0(first_plot_name,"-",second_plot_name,"-",third_plot_name))
 p<-ggplot(data=df_start_all)+
-  geom_text(aes(x=first_part_center,y=plot_name,label=first_part_model,angle=0,color="1"))+
-  geom_text(aes(x=second_part_center,y=plot_name,label=second_part_model,angle=angle.x,color="2"))+
-  geom_text(aes(x=third_part_center,y=plot_name,label=third_part_model,angle=angle.y,color="3"))+
-  
- # geom_segment(aes(x=first_part_start,xend=first_part_finish,y=plot_name,yend=plot_name,color="1"))+
- # geom_segment(aes(x=second_part_start,xend=second_part_finish,y=plot_name,yend=plot_name,color="2"))+
- # geom_segment(aes(x=third_part_start,xend=third_part_finish,y=plot_name,yend=plot_name,color="3"))+
+  labs(x="",y="structure")+
+  geom_text(aes(x=v_min,y=plot_name,label=frequence,angle=0))+
+  geom_text(aes(x=first_part_center,y=plot_name,label=first_plot_name,angle=0,color="1"))+
+  geom_text(aes(x=second_part_center,y=plot_name,label=second_plot_name,angle=angle.x,color="2"))+
+  geom_text(aes(x=third_part_center,y=plot_name,label=third_plot_name,angle=angle.y,color="3"))+
   scale_y_discrete(breaks = NULL,labels = NULL)+
-  scale_x_continuous(breaks = NULL,labels = NULL)+
+  scale_x_continuous(breaks = NULL,labels = NULL,limits = c(v_min,v_max))+
   facet_grid(name~.,scales = "free", space = "free")+theme_bw()
 ggsave(p,filename = paste0(part_start,"results/",prot_name,"_all_parts_rebilder.png"), width = 20, height = 20, units = c("cm"), dpi = 200 ) 

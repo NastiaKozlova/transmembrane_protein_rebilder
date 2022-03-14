@@ -119,7 +119,7 @@ df_start<-df_start_all%>%select(name,orientarion,frequence, plot_name,
 #colnames(df_start_all)<-
 p<-ggplot(data=df_start)+
   labs(x="number of aminoaids",y="structure")+
-  geom_text(aes(x=0,y=plot_name,label=frequence,angle=0))+
+  geom_text(aes(x=v_min,y=plot_name,label=frequence,angle=0))+
   geom_text(aes(x=first_part_center,y=plot_name,label=first_plot_name,angle=0,color="1"))+
   geom_text(aes(x=second_part_center,y=plot_name,label=second_plot_name,angle=angle,color="2"))+
   scale_y_discrete(breaks = NULL,labels = NULL)+
