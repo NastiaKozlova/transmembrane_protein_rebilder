@@ -177,6 +177,8 @@ df_start_all<-df_start_all%>%mutate(frequence=paste0(first_part_frequence,"\n",s
 #df_start<-df_start%>%mutate(plot_name=paste0(first_plot_name,"-",   second_plot_name))
 #colnames(df_start_all)<-+
 df_start_all<-df_start_all%>%mutate(name=paste0(first_plot_name,"-",second_plot_name,"-",third_plot_name))
+v_min<-min(df_start_all$first_part_start,df_start_all$second_part_start,df_start_all$third_part_start)
+v_max<-max(df_start_all$first_part_finish,df_start_all$second_part_finish,df_start_all$third_part_finish)
 p<-ggplot(data=df_start_all)+
   labs(x="",y="structure")+
   geom_text(aes(x=v_min,y=plot_name,label=frequence,angle=0))+

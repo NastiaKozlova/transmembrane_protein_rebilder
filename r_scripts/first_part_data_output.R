@@ -110,14 +110,15 @@ v_max<-max(df_start_all$first_part_finish,df_start_all$second_part_finish)
 df_start_all<-left_join(x = df_start_all,y = df_plot_name,by=c("first_part_model"="part_name"))
 df_start_all<-left_join(x = df_start_all,y = df_plot_name,by=c("second_part_model"="part_name"))
 
-df_start_all<-df_start_all%>%mutate(first_plot_name=fin_name.x)
-df_start_all<-df_start_all%>%mutate(second_plot_name=fin_name.y)
-df_start<-df_start_all%>%select(name,orientarion,frequence, plot_name,        
-                                     persent_align, group_number,first_part_group_number,
-                                     angle,first_part_center,second_part_center,first_plot_name,   second_plot_name)
-#df_start<-df_start%>%mutate(plot_name=paste0(first_plot_name,"-",   second_plot_name))
-#colnames(df_start_all)<-
-p<-ggplot(data=df_start)+
+df_start_all<-left_join(x = df_start_all,y = df_plot_name,by=c("first_part_model"="part_name"))
+df_start_all<-df_start_all%>%mutate(first_plot_name=fin_name)
+df_start_all$fin_name<-NULL
+df_start_all<-left_join(x = df_start_all,y = df_plot_name,by=c("second_part_model"="part_name"))
+df_start_all<-df_start_all%>%mutate(second_plot_name=fin_name)
+df_start_all$fin_name<-NULL
+df_start_all<-df_start_all%>%mutate(name=paste0(first_plot_name,"-",second_plot_name))
+
+p<-ggplot(data=df_start_all)+
   labs(x="number of aminoaids",y="structure")+
   geom_text(aes(x=v_min,y=plot_name,label=frequence,angle=0))+
   geom_text(aes(x=first_part_center,y=plot_name,label=first_plot_name,angle=0,color="1"))+
