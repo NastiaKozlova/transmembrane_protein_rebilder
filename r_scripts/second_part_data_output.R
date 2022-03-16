@@ -166,22 +166,20 @@ df_start_all$fin_name<-NULL
 df_start_all<-left_join(x = df_start_all,y = df_plot_name,by=c("third_part_model"="part_name"))
 df_start_all<-df_start_all%>%mutate(third_plot_name=fin_name)
 df_start_all$fin_name<-NULL
-df_start_all<-df_start_all%>%mutate(frequence=paste0(first_part_frequence,"\n",second_part_frequence))
-#df_start<-df_start_all%>%select(name,orientation,frequence, plot_name,        
-#                                first_part_group_number,
-#                                angle.x,angle.y,
-#                                first_part_center,second_part_center,third_part_center,
-#                                first_plot_name,   second_plot_name,third_plot_name)
-#df_start<-df_start%>%mutate(frequence=paste0(first_part_frequence,"\n",second_part_frequence))
+#df_start_all<-df_start_all%>%mutate(frequence=paste0(first_part_frequence,"\n",second_part_frequence))
 
-#df_start<-df_start%>%mutate(plot_name=paste0(first_plot_name,"-",   second_plot_name))
-#colnames(df_start_all)<-+
 df_start_all<-df_start_all%>%mutate(name=paste0(first_plot_name,"-",second_plot_name,"-",third_plot_name))
 v_min<-min(df_start_all$first_part_start,df_start_all$second_part_start,df_start_all$third_part_start)
 v_max<-max(df_start_all$first_part_finish,df_start_all$second_part_finish,df_start_all$third_part_finish)
+df_start_all<-df_start_all%>%mutate(statistic=paste0("first_frequence ",first_part_frequence,
+                                                     "\nfirst_RMSD ",first_part_RMSD,
+                                                     "\nfirst_persent_align",first_part_persent_align,
+                                                     "second_frequence ",second_part_frequence,
+                                                     "\nsecond_RMSD ",second_part_RMSD,
+                                                     "\nsecond_persent_align",second_part_persent_align))
 p<-ggplot(data=df_start_all)+
-  labs(x="",y="structure")+
-  geom_text(aes(x=v_min,y=plot_name,label=frequence,angle=0))+
+  labs(x="number of aminoaids",y="structure")+
+  geom_text(aes(x=v_min,y=plot_name,label=statistic,angle=0))+
   geom_text(aes(x=first_part_center,y=plot_name,label=first_plot_name,angle=0,color="1"))+
   geom_text(aes(x=second_part_center,y=plot_name,label=second_plot_name,angle=angle.x,color="2"))+
   geom_text(aes(x=third_part_center,y=plot_name,label=third_plot_name,angle=angle.y,color="3"))+
