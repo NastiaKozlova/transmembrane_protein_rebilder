@@ -23,7 +23,7 @@ Algoritm contains following parts:
 - If there is no WT structure among the probable structures, then structures with energies below the 25% quartile are considered probable, out of all probable structures
 
 r_scripts/main_script.R - script which you should start after putting all files into they places.
-r_scripts/pdb_prepare.R ",part_start - prepare parts of protein strructures and run docking using PatchDock __Doesn't run on Debian 10__ You will see error "Segmentation error are occure, problem with PathDock, programm is docking shourter part to there longer one" 
+r_scripts/pdb_prepare.R ",part_start - prepare parts of protein structures and run docking using PatchDock __Doesn't run on Debian 10__ You will see error "Segmentation error are appeared, problem with PathDock, program is docking shorter part to there longer one" 
 
 ## Dependencies
 
