@@ -41,5 +41,4 @@ File examples are present in start_example folder
 /home/nastia/Dissertation/structure_rebilder/xylE/transmembrane_protein_rebilder/start/df_parts.csv
 
 
-Output for the first part will the structure_prediction/'name of your parts'/fin_structure which are determined in yours 
-The Final will be in the directory start/fin_prediction
+Output for the experiment are in the result folder
