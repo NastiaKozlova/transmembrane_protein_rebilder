@@ -38,7 +38,5 @@ CHARMM36 force fields in to start/toppar
 protein toplogy in start/df_topology.csv
 if you neeed to rename domain names on the plots  put renamed plots in to start/domain_name.csv
 File examples are present in start_example folder
-/home/nastia/Dissertation/structure_rebilder/xylE/transmembrane_protein_rebilder/start/df_parts.csv
-
 
 Output for the experiment are in the result folder
