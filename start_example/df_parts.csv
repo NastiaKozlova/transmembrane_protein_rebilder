@@ -1,0 +1,5 @@
+name,first_part_model,first_part_start,first_part_finish,second_part_model,second_part_start,second_part_finish,third_part_model,third_part_start,third_part_finish
+TMD1-6_TMD7-12,TMD1-TMD6,1,190,TMD7-TMD12,221,415,NA,0,0
+TMD1-6_TMD8-12_TMD7,TMD1-TMD6,1,190,TMD8-TMD12,261,415,TMD7,221,241
+TMD1-6_TMD7_TMD8-12,TMD1-TMD6,1,190,TMD7,221,241,TMD8-TMD12,261,415
+TMD8-12_TMD7_TMD1-6,TMD8-TMD12,261,415,TMD7,221,241,TMD1-TMD6,1,190
