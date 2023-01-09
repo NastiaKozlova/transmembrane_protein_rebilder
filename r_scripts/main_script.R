@@ -19,6 +19,9 @@ system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/sort_structu
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/TMD_no_7_analysis.R ",part_start),ignore.stdout=T,wait = T)
 
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/TMD_no_7_combine_files_RMSD_analysis.R ",part_start),ignore.stdout=T,wait = T)
+system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/calibration_first_parts.R ",part_start),ignore.stdout=T,wait = T)
+
+
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/TMD_no_7_fin_report.R ",part_start),ignore.stdout=T,wait = T)
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/first_part_data_output.R ",part_start),ignore.stdout=T,wait = T)
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/first_part_TMD_interactions.R ",part_start),ignore.stdout=T,wait = T)
