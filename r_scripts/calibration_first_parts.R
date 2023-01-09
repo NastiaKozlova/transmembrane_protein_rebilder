@@ -31,7 +31,7 @@ if (nrow(df_start)>1){
 }
 p<-ggplot(data=df_RMSD, aes(x=RMSD))+
   labs(x="RMSD, A")+
-  geom_freqpoly(binwidth=0.1)+
-  scale_x_continuous(breaks = seq(from=0,to=10,by=0.1),labels =  seq(from=0,to=10,by=0.1))+
+  geom_density()+
+  scale_x_continuous(breaks = seq(from=0,to=10,by=0.5),labels =  seq(from=0,to=10,by=0.5))+
   theme_bw()
-ggsave(p,filename = paste0(part_start,"results/calibrtion_first_parts.png"), width = 20, height = 20, units = c("cm"), dpi = 200 ) 
+ggsave(p,filename = paste0(part_start,"results/calibrtion_first_parts.png"), width = 20, height = 15, units = c("cm"), dpi = 300 ) 
