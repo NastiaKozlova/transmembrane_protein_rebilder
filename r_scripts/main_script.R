@@ -40,6 +40,8 @@ system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/check_intera
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/sort_structure_interactions_add.R ",part_start),ignore.stdout=T,wait = T)
 
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/TMD_add_7_analysis.R ",part_start),ignore.stdout=T,wait = T)
+system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/calibration_second_parts.R ",part_start),ignore.stdout=T,wait = T)
+
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/TMD_add_7_combine_files_RMSD_analysis.R ",part_start),ignore.stdout=T,wait = T)
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/TMD_add_7_fin_report.R ",part_start),ignore.stdout=T,wait = T)
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/second_part_data_output.R ",part_start),ignore.stdout=T,wait = T)
