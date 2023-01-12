@@ -23,16 +23,20 @@ df_start<-df_start%>%filter(test)
 part<-paste0(parta,df_start$name[1],"/")
 df_RMSD<-read.csv(paste0(part,"df_RMSD_all.csv"),stringsAsFactors =  F)
 df_RMSD<-df_RMSD%>%mutate(RMSD=round(RMSD,digits = 1))
+df_RMSD<-df_RMSD%>%select(RMSD)
+df_RMSD<-df_RMSD%>%group_by(RMSD)%>%mutate(count=n())
 if (nrow(df_start)>1){
   for (name in 2:nrow(df_start)) {
     part<-paste0(parta,df_start$name[name],"/")
     df_RMSD_add<-read.csv(paste0(part,"df_RMSD_all.csv"),stringsAsFactors =  F)
     df_RMSD_add<-df_RMSD_add%>%mutate(RMSD=round(RMSD,digits = 1))
+    df_RMSD_add<-df_RMSD_add%>%select(RMSD)
+    df_RMSD_add<-df_RMSD_add%>%group_by(RMSD)%>%mutate(count=n())
     df_RMSD<-rbind(df_RMSD,df_RMSD_add)
   }
 }
 df_RMSD<-df_RMSD%>%select(RMSD)
-df_RMSD<-df_RMSD%>%group_by(RMSD)%>%mutate(count=n())
+df_RMSD<-df_RMSD%>%group_by(RMSD)%>%mutate(count_sum=sum(count))
 
 df_RMSD<-unique(df_RMSD)
 p<-ggplot(data=df_RMSD, aes(x=RMSD,y=count))+
