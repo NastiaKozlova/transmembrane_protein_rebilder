@@ -22,10 +22,12 @@ for (name in 1:nrow(df_start)) {
 df_start<-df_start%>%filter(test)
 part<-paste0(parta,df_start$name[1],"/")
 df_RMSD<-read.csv(paste0(part,"df_RMSD_all.csv"),stringsAsFactors =  F)
+df_RMSD<-df_RMSD%>%round(RMSD=round(RMSD,digits = 1))
 if (nrow(df_start)>1){
   for (name in 2:nrow(df_start)) {
     part<-paste0(parta,df_start$name[name],"/")
     df_RMSD_add<-read.csv(paste0(part,"df_RMSD_all.csv"),stringsAsFactors =  F)
+    df_RMSD_add<-df_RMSD_add%>%round(RMSD=round(RMSD,digits = 1))
     df_RMSD<-rbind(df_RMSD,df_RMSD_add)
   }
 }
