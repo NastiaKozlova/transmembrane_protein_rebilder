@@ -32,16 +32,21 @@ w<-1
 if(nrow(df_start)>0){
   df_RMSD<-read.csv(paste0(part,df_start$name[w],"/add_domain/",df_start$group_number[w],"/df_RMSD_all.csv"),stringsAsFactors = F)
   df_RMSD<-df_RMSD%>%mutate(RMSD=round(RMSD,digits = 1))
+  df_RMSD<-df_RMSD%>%select(RMSD)
+  df_RMSD<-df_RMSD%>%group_by(RMSD)%>%mutate(count=n())
+  df_RMSD<-unique(df_RMSD)
   if(nrow(df_start)>1){
     for (w in 2:nrow(df_start)){
       df_RMSD_add<-read.csv(paste0(part,df_start$name[w],"/add_domain/",df_start$group_number[w],"/df_RMSD_all.csv"),stringsAsFactors = F)
       df_RMSD_add<-df_RMSD_add%>%mutate(RMSD=round(RMSD,digits = 1))
+      df_RMSD_add<-df_RMSD_add%>%select(RMSD)
+      df_RMSD_add<-df_RMSD_add%>%group_by(RMSD)%>%mutate(count=n())
+      df_RMSD_add<-unique(df_RMSD_add)
       df_RMSD<-rbind(df_RMSD,df_RMSD_add)
     }
   }
 }
-df_RMSD<-df_RMSD%>%select(RMSD)
-df_RMSD<-df_RMSD%>%group_by(RMSD)%>%mutate(count=n())
+df_RMSD<-df_RMSD%>%group_by(RMSD)%>%mutate(count_sum=sum(count))
 df_RMSD<-unique(df_RMSD)
 p<-ggplot(data=df_RMSD, aes(x=RMSD,y=count))+
   labs(x="RMSD, A")+
