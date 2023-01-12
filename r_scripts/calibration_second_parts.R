@@ -48,7 +48,7 @@ if(nrow(df_start)>0){
 }
 df_RMSD<-df_RMSD%>%group_by(RMSD)%>%mutate(count_sum=sum(count))
 df_RMSD<-unique(df_RMSD)
-p<-ggplot(data=df_RMSD, aes(x=RMSD,y=count))+
+p<-ggplot(data=df_RMSD, aes(x=RMSD,y=count_sum))+
   labs(x="RMSD, A")+
   geom_line()+
   scale_x_continuous(breaks = seq(from=0,to=10,by=0.5),labels =  seq(from=0,to=10,by=0.5))+
