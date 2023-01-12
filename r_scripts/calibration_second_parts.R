@@ -10,7 +10,7 @@ library(ggplot2)
 v_RMSD<-10
 
 part<-paste0(part_start,"structure_prediction/")
-start<-read.pdb(paste0(part_start,"start/start.pdb"))
+#start<-read.pdb(paste0(part_start,"start/start.pdb"))
 df_start<-read.csv(paste0(part_start,"start/df_parts.csv"),stringsAsFactors = F)
 df_start_ad<-read.csv(paste0(part_start,"results/df_first_part.csv"),stringsAsFactors = F)
 df_start<-full_join(df_start_ad,df_start,by = c("name", "first_part_model",
@@ -47,10 +47,11 @@ if(nrow(df_start)>0){
   }
 }
 df_RMSD<-df_RMSD%>%group_by(RMSD)%>%mutate(count_sum=sum(count))
+df_RMSD<-df_RMSD%>%select(RMSD,count_sum)
 df_RMSD<-unique(df_RMSD)
 p<-ggplot(data=df_RMSD, aes(x=RMSD,y=count_sum))+
   labs(x="RMSD, A")+
   geom_line()+
   scale_x_continuous(breaks = seq(from=0,to=10,by=0.5),labels =  seq(from=0,to=10,by=0.5))+
   theme_bw()
-ggsave(p,filename = paste0(part_start,"results/calibrtion_first_parts.png"), width = 20, height = 15, units = c("cm"), dpi = 300 ) 
+ggsave(p,filename = paste0(part_start,"results/calibrtion_second_parts.png"), width = 20, height = 15, units = c("cm"), dpi = 300 ) 

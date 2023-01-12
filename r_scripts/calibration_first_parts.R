@@ -35,9 +35,8 @@ if (nrow(df_start)>1){
     df_RMSD<-rbind(df_RMSD,df_RMSD_add)
   }
 }
-df_RMSD<-df_RMSD%>%select(RMSD)
 df_RMSD<-df_RMSD%>%group_by(RMSD)%>%mutate(count_sum=sum(count))
-
+df_RMSD<-df_RMSD%>%select(RMSD,count_sum)
 df_RMSD<-unique(df_RMSD)
 p<-ggplot(data=df_RMSD, aes(x=RMSD,y=count_sum))+
   labs(x="RMSD, A")+
