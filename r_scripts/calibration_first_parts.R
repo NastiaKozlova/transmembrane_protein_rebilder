@@ -29,9 +29,12 @@ if (nrow(df_start)>1){
     df_RMSD<-rbind(df_RMSD,df_RMSD_add)
   }
 }
-p<-ggplot(data=df_RMSD, aes(x=RMSD))+
+df_RMSD<-df_RMSD%>%select(RMSD)
+df_RMSD<-df_RMSD%>%group_by(RMSD)%>%mutate(count=n())
+df_RMSD<-unique(df_RMSD)
+p<-ggplot(data=df_RMSD, aes(x=RMSD,y=count))+
   labs(x="RMSD, A")+
-  geom_density()+
+  geom_line()+
   scale_x_continuous(breaks = seq(from=0,to=10,by=0.5),labels =  seq(from=0,to=10,by=0.5))+
   theme_bw()
 ggsave(p,filename = paste0(part_start,"results/calibrtion_first_parts.png"), width = 20, height = 15, units = c("cm"), dpi = 300 ) 
