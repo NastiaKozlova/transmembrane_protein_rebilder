@@ -32,15 +32,18 @@ w<-1
 if(nrow(df_start)>0){
   df_RMSD<-read.csv(paste0(part,df_start$name[w],"/add_domain/",df_start$group_number[w],"/df_RMSD_all.csv"),stringsAsFactors = F)
   if(nrow(df_start)>1){
-  for (w in 2:nrow(df_start)){
-    df_RMSD_add<-read.csv(paste0(part,df_start$name[w],"/add_domain/",df_start$group_number[w],"/df_RMSD_all.csv"),stringsAsFactors = F)
-    df_RMSD<-rbind(df_RMSD,df_RMSD_add)
-  }
+    for (w in 2:nrow(df_start)){
+      df_RMSD_add<-read.csv(paste0(part,df_start$name[w],"/add_domain/",df_start$group_number[w],"/df_RMSD_all.csv"),stringsAsFactors = F)
+      df_RMSD<-rbind(df_RMSD,df_RMSD_add)
+    }
   }
 }
-p<-ggplot(data=df_RMSD, aes(x=RMSD))+
+df_RMSD<-df_RMSD%>%select(RMSD)
+df_RMSD<-df_RMSD%>%group_by(RMSD)%>%mutate(count=n())
+df_RMSD<-unique(df_RMSD)
+p<-ggplot(data=df_RMSD, aes(x=RMSD,y=count))+
   labs(x="RMSD, A")+
-  geom_density()+
+  geom_line()+
   scale_x_continuous(breaks = seq(from=0,to=10,by=0.5),labels =  seq(from=0,to=10,by=0.5))+
   theme_bw()
-ggsave(p,filename = paste0(part_start,"results/calibrtion_second_parts.png"), width = 20, height = 15, units = c("cm"), dpi = 300 ) 
+ggsave(p,filename = paste0(part_start,"results/calibrtion_first_parts.png"), width = 20, height = 15, units = c("cm"), dpi = 300 ) 
