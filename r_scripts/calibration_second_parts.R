@@ -31,9 +31,11 @@ df_start<-df_start%>%filter(!is.na(name))
 w<-1
 if(nrow(df_start)>0){
   df_RMSD<-read.csv(paste0(part,df_start$name[w],"/add_domain/",df_start$group_number[w],"/df_RMSD_all.csv"),stringsAsFactors = F)
+  df_RMSD<-df_RMSD%>%mutate(RMSD=round(RMSD=round(RMSD,digits = 1)))
   if(nrow(df_start)>1){
     for (w in 2:nrow(df_start)){
       df_RMSD_add<-read.csv(paste0(part,df_start$name[w],"/add_domain/",df_start$group_number[w],"/df_RMSD_all.csv"),stringsAsFactors = F)
+      df_RMSD_add<-df_RMSD_add%>%mutate(RMSD=round(RMSD=round(RMSD,digits = 1)))
       df_RMSD<-rbind(df_RMSD,df_RMSD_add)
     }
   }
