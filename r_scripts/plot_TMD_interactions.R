@@ -69,9 +69,10 @@ for (i in 1:nrow(df_start)) {
   # Calculate the observed assortativity
   observed.assortativity <- assortativity(g, values)
   # Calculate the assortativity of the network randomizing the gender attribute 1000 times
-  v_assortativity <- vector('list', 100000)
+  results<-100000
+  v_assortativity <- vector('list', results)
 #  v_assortativity.degree <- vector('list', 100000)
-  for(j in 1:100000){
+  for(j in 1:results){
     v_assortativity[[j]] <- assortativity(g, sample(values),directed = F)
 #    v_assortativity.degree[[j]] <- assortativity.degree(g, directed = FALSE)
   }
@@ -79,7 +80,7 @@ for (i in 1:nrow(df_start)) {
   # Plot the distribution of assortativity values and add a red vertical line at the original observed value
   v_assortativity<-(unlist(v_assortativity))
 #  v_assortativity.degree<-(unlist(v_assortativity.degree))
-  df_results<-data.frame(matrix(nrow=length(results),ncol=2))
+  df_results<-data.frame(matrix(nrow=results,ncol=2))
   colnames(df_results)<-c("assortativity","assortativity.degree")
   df_results$assortativity<-v_assortativity
 #  df_results$assortativity.degree<-v_assortativity.degree
@@ -91,8 +92,8 @@ for (i in 1:nrow(df_start)) {
 
   TMD_interaction<-paste0(part,"TMD_interactions_plot/",df_start$name[i],"_",df_start$group_number[i],".png")
   TMD_pictures<-paste0(part,"pictures/",df_start$name[i],"_",df_start$group_number[i],".png")
-  file.exists(file_name)
-  logo_file <- system.file( file_name, package = "cowplot")
+  #file.exists(file_name)
+  #logo_file <- system.file( file_name, package = "cowplot")
   
   p_TMD_interaction<-ggdraw() +  
     draw_image(TMD_interaction, scale = 1)
