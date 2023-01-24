@@ -78,7 +78,7 @@ for (i in 1:nrow(df_start)) {
   v_scale_x<-seq(from=-1,to=1,by=0.1)
   # Plot the distribution of assortativity values and add a red vertical line at the original observed value
   v_assortativity<-(unlist(v_assortativity))
-  v_assortativity.degree<-(unlist(v_assortativity.degree))
+#  v_assortativity.degree<-(unlist(v_assortativity.degree))
   df_results<-data.frame(matrix(nrow=length(results),ncol=2))
   colnames(df_results)<-c("assortativity","assortativity.degree")
   df_results$assortativity<-v_assortativity
