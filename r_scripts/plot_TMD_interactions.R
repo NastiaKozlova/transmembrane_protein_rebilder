@@ -82,7 +82,7 @@ for (i in 1:nrow(df_start)) {
   df_results<-data.frame(matrix(nrow=length(results),ncol=2))
   colnames(df_results)<-c("assortativity","assortativity.degree")
   df_results$assortativity<-v_assortativity
-  df_results$assortativity.degree<-v_assortativity.degree
+#  df_results$assortativity.degree<-v_assortativity.degree
   p_assortativity<-ggplot(df_results)+
     geom_density(aes(x=assortativity))+#,after_stat(density)),binwidth=0.05)+
     geom_vline(xintercept=observed.assortativity, linetype="dashed", color = "red")+
