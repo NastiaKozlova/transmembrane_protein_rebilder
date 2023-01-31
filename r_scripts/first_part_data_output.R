@@ -119,11 +119,11 @@ df_start_all$fin_name<-NULL
 df_start_all<-df_start_all%>%mutate(name=paste0(first_plot_name,"-",second_plot_name))
 df_start_all<-df_start_all%>%mutate(statistic=paste0("frequence ",frequence,"\nRMSD ",RMSD,"\n",persent_align))
 p<-ggplot(data=df_start_all)+
-  labs(x="number of aminoaids",y="structure")+
+  labs(x="number of aminoaids",y="")+
   geom_text(aes(x=v_min,y=plot_name,label=statistic,angle=0))+
   geom_text(aes(x=first_part_center,y=plot_name,label=first_plot_name,angle=0,color="1"))+
   geom_text(aes(x=second_part_center,y=plot_name,label=second_plot_name,angle=angle,color="2"))+
   scale_y_discrete(breaks = NULL,labels = NULL)+
-  scale_x_continuous(breaks = NULL,labels = NULL,limits = c((v_min-10),v_max))+
+  scale_x_continuous(breaks = NULL,labels = NULL,limits = c((v_min-20),v_max))+
   facet_grid(name~.,scales = "free", space = "free")+theme_bw()
 ggsave(p,filename = paste0(part_start,"results/",prot_name,"_first_part_rebilder.png"), width = 20, height = 20, units = c("cm"), dpi = 200 ) 
