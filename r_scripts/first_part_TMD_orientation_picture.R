@@ -47,7 +47,7 @@ for (i in 1:nrow(df_start)) {
   pdb_name<-paste0(part,"structure/",df_start$name[i],"/",df_start$name[i],"_",df_start$group_number[i],".pdb")
   df_tcl<-data.frame(matrix(nrow = 1,ncol = 1))
     df_tcl[1,1]<-paste0(#'cd ', part_name,"complex_structure_center/\n\n",
-                        'mol new {',pdb_name,'} type {pdb}')
+                        'mol new {',pdb_name,'} type {pdb}\n')
   #  b<-paste('(resid ',df_ring$NodeId1,' and name CA and resname ',df_ring$NodeId2," and name CA)")
   #  a<-paste0(b,collapse = " or ")
     df_tcl[1,2]<-paste0(#'set all [atomselect ',(i-1),' "',a,'"]\n',
