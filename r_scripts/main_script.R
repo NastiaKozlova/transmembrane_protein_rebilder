@@ -36,6 +36,7 @@ system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/first_part_T
 #TMD orinetation picture
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/first_part_TMD_orientation_picture.R ",part_start),ignore.stdout=T,wait = T)
 #make interactions plot 
+#need pictures
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/plot_TMD_interactions.R ",part_start),ignore.stdout=T,wait = T)
 
 #VMD run and make pictures
@@ -67,6 +68,7 @@ system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/calibration_
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/TMD_add_7_fin_report.R ",part_start),ignore.stdout=T,wait = T)
 #output of all parts dockng
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/second_part_data_output.R ",part_start),ignore.stdout=T,wait = T)
+
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/second_part_TMD_interactions.R ",part_start),ignore.stdout=T,wait = T)
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/second_part_plot_TMD_interactions.R ",part_start),ignore.stdout=T,wait = T)
 
