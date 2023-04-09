@@ -27,6 +27,8 @@ system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/TMD_no_7_com
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/calibration_first_parts.R ",part_start),ignore.stdout=T,wait = T)
 #count statistics, combine structures and write results
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/TMD_no_7_fin_report.R ",part_start),ignore.stdout=T,wait = T)
+
+
 #prepare first docking data output
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/first_part_data_output.R ",part_start),ignore.stdout=T,wait = T)
 #calculate interprotein interaction using Ring2 and interactions between domains based on Ring2 data  
@@ -63,7 +65,7 @@ system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/TMD_add_7_co
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/calibration_second_parts.R ",part_start),ignore.stdout=T,wait = T)
 #select most propable structures
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/TMD_add_7_fin_report.R ",part_start),ignore.stdout=T,wait = T)
-
+#output of all parts dockng
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/second_part_data_output.R ",part_start),ignore.stdout=T,wait = T)
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/second_part_TMD_interactions.R ",part_start),ignore.stdout=T,wait = T)
 system(command = paste0("Rscript --vanilla  ",part_start,"r_scripts/second_part_plot_TMD_interactions.R ",part_start),ignore.stdout=T,wait = T)
