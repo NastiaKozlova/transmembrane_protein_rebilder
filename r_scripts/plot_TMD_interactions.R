@@ -28,6 +28,8 @@ if (!dir.exists(paste0(part_start,"results/first_part/TMD_interactions/"))){dir.
 if (!dir.exists(paste0(part_start,"results/first_part/TMD_interactions_plot/"))){dir.create(paste0(part_start,"results/first_part/TMD_interactions_plot/"))}
 
 if (!dir.exists(paste0(part_start,"results/first_part/plot_merge/"))){dir.create(paste0(part_start,"results/first_part/plot_merge/"))}
+if (!dir.exists(paste0(part_start,"results/first_part/plot_arrange/"))){dir.create(paste0(part_start,"results/first_part/plot_arrange/"))}
+
 i<-1
 
 
@@ -104,5 +106,10 @@ for (i in 1:nrow(df_start)) {
   merge_plot<-plot_grid(p_assortativity, p1, labels = c('A', ''), label_size = 12,ncol=1)+
     theme(plot.background = element_rect(fill = "white", colour = "white"))
   ggsave(merge_plot,filename = paste0(part,"plot_merge/",df_start$name[i],"_",df_start$group_number[i],".png"), width = 20, height = 20, units = c("cm"), dpi = 200 )
+  p_arrange<-plot_grid(p_TMD_interaction, p_TMD_pictures, labels = c('A', 'B'), label_size = 12,ncol=2)+
+    theme(plot.background = element_rect(fill = "white", colour = "white"))
+  
+  ggsave(p_arrange,filename = paste0(part,"plot_arrange/",df_start$name[i],"_",df_start$group_number[i],".png"), width = 20, height = 10, units = c("cm"), dpi = 200 )
+  
 }
 
