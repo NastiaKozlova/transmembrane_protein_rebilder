@@ -5,7 +5,7 @@ library(ggplot2)
 library(dplyr)
 library(readr)
 library(cowplot)
-
+library(magick)
 library(igraph)
 #library(network)
 setwd(part_start)
@@ -51,17 +51,19 @@ for (i in 1:nrow(df_start)) {
   df_pdb<-unique(df_pdb)
   df_pdb<-df_pdb%>%mutate(part="first")
   
-  df_pdb$part[df_pdb$TMD_1>6]<-"second"
+  df_pdb$part[df_pdb$TMD_1>7]<-"second"
+  df_pdb$part[df_pdb$TMD_1==7]<-"TM7"
   df_pdb$part<-as.factor(df_pdb$part)
   
   g<-graph_from_data_frame(d = df_ring, vertices = df_pdb,
         directed = FALSE)#%%>%
   g <- set_vertex_attr(g, 'color' , value = df_pdb$part)
   g <- set_edge_attr(g, 'bonds' , value = df_ring$bonds_quantity)
-  png(paste0("TMD_interactions_plot/",df_start$name[i],"_",df_start$group_number[i],".png"), width = 500, height = 500) 
-  plot(g,
+  png(paste0("TMD_interactions_plot/",df_start$name[i],"_",df_start$group_number[i],".png"), width = 1000, height = 1000) 
+  plot.igraph(g,
        edge.width = E(g)$bonds,
        vertex.label.color = "black",
+       size=100,
        layout = layout_nicely(g),
        vertex.color = V(g)$color,
        )
@@ -102,11 +104,11 @@ for (i in 1:nrow(df_start)) {
   p_TMD_pictures<-ggdraw() +  
     draw_image(TMD_pictures, scale = 1)
   
-  p1<-plot_grid(p_TMD_interaction, p_TMD_pictures, labels = c('B', 'C'), label_size = 12,ncol=2)
-  merge_plot<-plot_grid(p_assortativity, p1, labels = c('A', ''), label_size = 12,ncol=1)+
+  p1<-plot_grid(p_TMD_interaction, p_TMD_pictures, label_size = 12,ncol=2)
+  merge_plot<-plot_grid(p_assortativity, p1,  label_size = 12,ncol=1)+
     theme(plot.background = element_rect(fill = "white", colour = "white"))
   ggsave(merge_plot,filename = paste0(part,"plot_merge/",df_start$name[i],"_",df_start$group_number[i],".png"), width = 20, height = 20, units = c("cm"), dpi = 200 )
-  p_arrange<-plot_grid(p_TMD_interaction, p_TMD_pictures, labels = c('A', 'B'), label_size = 12,ncol=2)+
+  p_arrange<-plot_grid(p_TMD_interaction, p_TMD_pictures, label_size = 12,ncol=2)+
     theme(plot.background = element_rect(fill = "white", colour = "white"))
   
   ggsave(p_arrange,filename = paste0(part,"plot_arrange/",df_start$name[i],"_",df_start$group_number[i],".png"), width = 20, height = 10, units = c("cm"), dpi = 200 )
