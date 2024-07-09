@@ -4,18 +4,27 @@ library(dplyr)
 library(bio3d)
 library(readr)
 library(ggplot2)
+library(stringr) 
 setwd(part_start)
 df_plot_name<-read.csv("start/domain_name.csv",stringsAsFactors =  F)
 prot_name<-strsplit(part_start,split = "/")[[1]]
 prot_name<-prot_name[length(prot_name)-1]
 i<-2
 i<-1
+j<-1
 sort_structures<-function(df_start,i){
   v_start<-length(list.files(paste0(df_start$name[i],"/structure")))
   df_start_all<-read.csv(paste0(df_start$name[i],"/fin.csv"),stringsAsFactors = F)
   df_start_all<-df_start_all%>%mutate(angle=angle*90/pi*2)
   df_start_all<-df_start_all%>%mutate(angle_mem=angle_mem*90/pi*2)
-  
+  df_start_all<-df_start_all%>%mutate(type=NA)
+  for (j in 1:nrow(df_start_all)) {
+      df_start_all$type[j]<-paste0(strsplit(df_start_all$name[j],split = "_")[[1]][1:2],collapse = "_")
+  }
+
+  #df_start_all<-df_start_all%>%mutate(type=F)
+  df_start_all<-df_start_all%>%mutate(type=str_detect(df_start_all$type,"ETM"))
+  df_start_all$angle[df_start_all$type]<-df_start_all$angle_mem[df_start_all$type]
   df_start_all<-df_start_all%>%mutate(persent_align=round(align_models/group_models*100,digits = 1))
   df_start_all<-df_start_all%>%mutate(orientarion="between")
   
@@ -80,7 +89,7 @@ df_start_all<-df_start_all%>%mutate(persent_align=round(align_models/group_model
 df_start_all<-df_start_all%>%select(name,orientarion,RMSD,frequence, RMSD,persent_align,group_models, angle,
                                     first_part_model,first_part_start,first_part_finish,second_part_model,second_part_start, 
                                     second_part_finish,group_number,bond_energy_fs)
-if(dir.exists(paste0(part_start,"results/"))) {system(command = paste0("rm -r ",part_start,"results/"),ignore.stdout=T,wait = T)}
+#if(dir.exists(paste0(part_start,"results/"))) {system(command = paste0("rm -r ",part_start,"results/"),ignore.stdout=T,wait = T)}
 if(!dir.exists(paste0(part_start,"results/"))){dir.create(paste0(part_start,"results/"))}
 if(!dir.exists(paste0(part_start,"results/first_part/"))){dir.create(paste0(part_start,"results/first_part/"))}
 if(!dir.exists(paste0(part_start,"results/first_part/structure"))){dir.create(paste0(part_start,"results/first_part/structure"))}
