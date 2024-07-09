@@ -3,6 +3,7 @@ library(bio3d)
 library(dplyr)
 library(ggplot2)
 setwd(part_start)
+if(!dir.exists(paste0(part_start,"results/"))){dir.create(paste0(part_start,"results/"))}
 parta<-paste0(part_start,"structure_prediction/")
 df_start<-read.csv("start/df_parts.csv",stringsAsFactors = F)
 df_start<-df_start%>%mutate(test=F)
