@@ -136,10 +136,16 @@ for (w in 1:nrow(df_start)) {
         }
         df_topology_TEST<-df_topology_TEST%>%filter(seq_end<=v_moving_finish)
         df_topology_TEST<-df_topology_TEST%>%mutate(symbol=(1))
-        for (i in 2:nrow(df_topology_TEST)) {
-          if(df_topology_TEST$type[(i-1)]!="Cytoplasmic"){df_topology_TEST$symbol[i]<-(-1)}
+        if (nrow(df_topology_TEST)>1){
+            for (i in 2:nrow(df_topology_TEST)) {
+                if(df_topology_TEST$type[(i-1)]!="Cytoplasmic"){df_topology_TEST$symbol[i]<-(-1)}
+            }
         }
-        df_topology_TEST<-df_topology_TEST%>%filter(type=="Transmembrane")
+        df_topology_TEST_a<-df_topology_TEST%>%filter(type=="Transmembrane")
+        if(nrow(df_topology_TEST_a)>1){
+            df_topology_TEST<-df_topology_TEST_a
+        }
+
         df_groups<-df_groups%>%mutate(angle=NA)
         pdb<-read.pdb(paste0("control.pdb"))
         df_pdb<-pdb$atom
