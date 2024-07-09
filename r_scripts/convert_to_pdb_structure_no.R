@@ -12,8 +12,8 @@ for (name in 1:nrow(df_start)) {
   setwd(part)
   if(file.exists("patchdock/params.txt")){file.remove("patchdock/params.txt")}
   models<-list.files("patchdock")
-  df_RMSD<-data.frame(matrix(ncol = 2,nrow=length(models)))
-  colnames(df_RMSD)<-c("models","RMSD")
+  df_RMSD<-data.frame(matrix(ncol = 4,nrow=length(models)))
+  colnames(df_RMSD)<-c("models","RMSD","max_length","min_length")
   df_RMSD$models<-models
   #  df_RMSD<-df_RMSD%>%mutate(chain=model_name[name])
   if (!dir.exists("structure/")){dir.create("structure/")}
@@ -55,6 +55,7 @@ for (name in 1:nrow(df_start)) {
     df_pdbt<-df_pdbt%>%mutate(max_length=(finish-start-1)*3)
     df_pdbt<-df_pdbt%>%filter(length>2)
     df_pdbt<-df_pdbt%>%filter(length<max_length)
+
     if(nrow(df_pdbt)>0){
       df_RMSD$max_length[i]<-max(df_pdbt$length)
       df_RMSD$min_length[i]<-min(df_pdbt$length)
