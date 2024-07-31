@@ -5,13 +5,24 @@ library(ggplot2)
 library(dplyr)
 library(readr)
 setwd(part_start)
+
+if (!dir.exists(paste0(part_start,"results/second_part/pictures/"))){dir.create(paste0(part_start,"results/second_part/pictures/"))}
+
 df_start<-read.csv("results/df_second_part.csv",stringsAsFactors = F)
 df_topology<-read.csv("start/df_topology.csv",stringsAsFactors = F)
-df_seq<-data.frame(matrix(nrow = max(c(df_start$first_part_finish,df_start$second_part_finish,df_start$third_part_finish)),ncol = 2))
+df_seq<-data.frame(matrix(nrow = max(c(df_start$first_part_finish,df_start$second_part_finish)),ncol = 2))
 colnames(df_seq)<-c("amino","TMD")
 df_seq$amino<-c(1:nrow(df_seq))
-df_topology<-df_topology%>%filter(type=="Transmembrane")
+#df_color<-df_color%>%filter(domain=="ETM")
+#df_topology_add<-df_topology%>%filter(seq_beg==df_color$start[1])
+
+df_topology_add<-df_topology[df_topology$type%in%c("CTM","ETM"),]
+
+df_topology<-df_topology[df_topology$type%in%c("Transmembrane"),]
 df_topology<-df_topology%>%mutate(type=c(1:nrow(df_topology)))
+
+
+df_topology<-rbind(df_topology,df_topology_add)
 for (i in 1:nrow(df_topology)) {
   df_seq$TMD[df_seq$amino>=df_topology$seq_beg[i]&df_seq$amino<=df_topology$seq_end[i]]<-df_topology$type[i]
 }
