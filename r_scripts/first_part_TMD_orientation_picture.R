@@ -19,8 +19,13 @@ df_color<-read.csv("start/vmd_coloring.csv",stringsAsFactors = F)
 df_seq<-data.frame(matrix(nrow = max(c(df_start$first_part_finish,df_start$second_part_finish)),ncol = 2))
 colnames(df_seq)<-c("amino","TMD")
 df_seq$amino<-c(1:nrow(df_seq))
-df_topology<-df_topology%>%filter(type=="Transmembrane")
+df_topology_add<-df_topology[df_topology$type%in%c("CTM","ETM"),]
+
+df_topology<-df_topology[df_topology$type%in%c("Transmembrane"),]
 df_topology<-df_topology%>%mutate(type=c(1:nrow(df_topology)))
+
+
+df_topology<-rbind(df_topology,df_topology_add)
 for (i in 1:nrow(df_topology)) {
   df_seq$TMD[df_seq$amino>=df_topology$seq_beg[i]&df_seq$amino<=df_topology$seq_end[i]]<-df_topology$type[i]
 }
