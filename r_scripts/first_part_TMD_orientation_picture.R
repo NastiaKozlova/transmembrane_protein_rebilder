@@ -36,20 +36,9 @@ i<-1
 if (!dir.exists(paste0("make_picture_tcl_center"))){dir.create(paste0("make_picture_tcl_center"))}
 i<-1
 #make_picture_tcl_center
+#v_end_amino<-c(df_color$selected_amino)
 for (i in 1:nrow(df_start)) {
   
-  #  df_ring<-read.csv(paste0("interactions/",df_start$name[i],"_",df_start$group_number[i],".txt"),stringsAsFactors = F)
-  #  df_ring<-left_join(df_ring,df_seq,by=c("NodeId1"="amino"))
-  #  df_ring<-left_join(df_ring,df_seq,by=c("NodeId2"="amino"))
-  #  colnames(df_ring)<-c("NodeId1", "NodeId2","Interaction", "resid_1", "resid_2", "TMD_1", "TMD_2" )
-  #  df_ring<-df_ring%>%filter(!is.na(TMD_1))
-  #  df_ring<-df_ring%>%filter(!is.na(TMD_2))
-  #  df_ring<-df_ring%>%filter(TMD_1!=TMD_2)
-  
-  
-  #  df_ring<-df_ring%>%mutate(TMD_1=paste0("TM",TMD_1))
-  #  df_ring<-df_ring%>%mutate(TMD_2=paste0("TM",TMD_2))
-  #  df_ring<-df_ring%>%select(TMD_1,TMD_2,bonds_quantity)
   pdb_name<-paste0(part,"structure/",df_start$name[i],"/",df_start$name[i],"_",df_start$group_number[i],".pdb")
   df_tcl<-data.frame(matrix(nrow = 1,ncol = 2+nrow(df_color)))
   df_tcl[1,1]<-paste0(#'cd ', part_name,"complex_structure_center/\n\n",
@@ -69,10 +58,12 @@ for (i in 1:nrow(df_start)) {
   #    a<-a[a%in%df_seq$amino]
   #    b<-c(df_start$second_part_start[i] :  df_start$second_part_finish[i])
   #    b<-b[b%in%df_seq$amino]
+  
   df_tcl[1,3]<-paste('mol modselect 0 ',i-1,' all \n',
                      'mol modmaterial 0 ',(i-1),' Transparent\n',
                      'mol modstyle 0 ' ,i-1, ' NewCartoon\n',
-                     'mol modcolor 0 ' ,i-1, ' Type \n\n')#,
+                     'mol modcolor 0 ' ,i-1, ' Type \n\n'
+                     )#,
   toster<-str_detect(pattern=df_color$domain,df_start$name[i])
   df_colored<-df_color[toster,]
   for (p in 1:nrow(df_colored)) {
@@ -86,8 +77,16 @@ for (i in 1:nrow(df_start)) {
                          'mol modmaterial ',p, ' ',(i-1),' Opaque\n',
                          'mol modstyle ',p, ' ',i-1, ' NewCartoon\n',#,
                          'mol modcolor ',p, ' ',i-1, ' ColorID ',df_colored$colour[p],' \n')
+    df_tcl[2,p+3]<-paste('mol selection  protein and',
+                         ' resid ',paste0(df_colored$selected_amino[p],collapse = " "),
+                         'and type CA \n',
+                         'mol addrep ',(i-1),'\n',
+                         'mol modmaterial ',p+nrow(df_colored), ' ',(i-1),' Opaque\n',
+                         'mol modstyle ',p+nrow(df_colored), ' ',i-1, ' Surf\n',#,
+                         'mol modcolor ',p+nrow(df_colored), ' ',i-1, ' ColorID ',df_colored$colour[p],' \n')
     
   }
+
   write.csv(df_tcl,paste0("make_picture_tcl_center/",df_start$name[i],"_",df_start$group_number[i],".tcl"),row.names = F)
 }
 
