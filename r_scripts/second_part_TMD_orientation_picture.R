@@ -75,6 +75,13 @@ for (i in 1:nrow(df_start)) {
                              'mol modmaterial ',p, ' ',(i-1),' Opaque\n',
                              'mol modstyle ',p, ' ',i-1, ' NewCartoon\n',#,
                              'mol modcolor ',p, ' ',i-1, ' ColorID ',df_colored$colour[p],' \n')
+        df_tcl[2,p+3]<-paste('mol selection  protein and',
+                             ' resid ',paste0(df_colored$selected_amino[p],collapse = " "),
+                             'and type CA \n',
+                             'mol addrep ',(i-1),'\n',
+                             'mol modmaterial ',p+nrow(df_colored), ' ',(i-1),' Opaque\n',
+                             'mol modstyle ',p+nrow(df_colored), ' ',i-1, ' Surf\n',#,
+                             'mol modcolor ',p+nrow(df_colored), ' ',i-1, ' ColorID ',df_colored$colour[p],' \n')
         
     }
     write.csv(df_tcl,paste0("make_picture_tcl_center/",df_start$name[i],"_first_part_",df_start$first_part_group_number[i],
